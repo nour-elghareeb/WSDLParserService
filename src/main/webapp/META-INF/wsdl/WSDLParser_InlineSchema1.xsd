@@ -49,6 +49,21 @@
         </xsd:complexType>
     </xsd:element>
     
+    <xsd:element ibmSchExtn:docRoot="true" name="DeleteWSDLRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="DeleteWSDLResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>DeleteWSDL
+    
     <xsd:element ibmSchExtn:docRoot="true" name="ListServicePortsRequest">
         <xsd:complexType>
             <xsd:sequence>

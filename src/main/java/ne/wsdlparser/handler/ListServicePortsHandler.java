@@ -20,7 +20,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class ListServicePortsHandler extends ServiceHandler<ListServicePortsRequest, ListServicePortsResponse> {
-
+    public ListServicePortsHandler() throws WSDLParserFault{
+        super();
+    }
     @Override
     public ListServicePortsResponse handle(ListServicePortsRequest request) throws WSDLParserFault {
         try {

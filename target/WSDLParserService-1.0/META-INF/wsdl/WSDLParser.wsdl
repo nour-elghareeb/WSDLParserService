@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="WSDLParser" 
-	targetNamespace="ne.wsdlparse"
-    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:tns="ne.wsdlparse"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                  targetNamespace="ne.wsdlparse"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="ne.wsdlparse"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <wsdl:types>
         <xsd:schema targetNamespace="ne.wsdlparse" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-           <xsd:include schemaLocation="WSDLParser_InlineSchema1.xsd"></xsd:include>
+            <xsd:include schemaLocation="WSDLParser_InlineSchema1.xsd"></xsd:include>
         </xsd:schema>
     </wsdl:types>
     <wsdl:message name="UploadWSDLRequest">
@@ -22,9 +22,7 @@
     </wsdl:message>
     <wsdl:message name="ListServicesResponse">
         <wsdl:part element="tns:ListServicesResponse" name="parameters" />
-    </wsdl:message>
-    
-    
+    </wsdl:message>    
     <wsdl:message name="ListAvailableWSDLsRequest">
         <wsdl:part element="tns:ListAvailableWSDLsRequest" name="parameters" />
     </wsdl:message>
@@ -56,6 +54,13 @@
         <wsdl:part element="tns:GenerateMessageESQLResponse" name="parameters" />
     </wsdl:message>
     
+    
+    <wsdl:message name="DeleteWSDLRequest">
+        <wsdl:part element="tns:DeleteWSDLRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="DeleteWSDLResponse">
+        <wsdl:part element="tns:DeleteWSDLResponse" name="parameters" />
+    </wsdl:message>
     <wsdl:message name="WSDLParserFault">
         <wsdl:part name="parameters" element="tns:WSDLParserFaultDetails"></wsdl:part>
     </wsdl:message>
@@ -95,6 +100,11 @@
         <wsdl:operation name="ListOperationMessages">
             <wsdl:input message="tns:ListOperationMessagesRequest" name="ListOperationMessagesRequest"/>
             <wsdl:output message="tns:ListOperationMessagesResponse" name="ListOperationMessagesResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteWSDL">
+            <wsdl:input message="tns:DeleteWSDLRequest" name="DeleteWSDLRequest"/>
+            <wsdl:output message="tns:DeleteWSDLResponse" name="DeleteWSDLResponse" />
             <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
         </wsdl:operation>
     </wsdl:portType>
@@ -186,10 +196,23 @@
                 <soap:fault name="WSDLParserFault" use="literal"/>
             </wsdl:fault>
         </wsdl:operation>
+        
+        <wsdl:operation name="DeleteWSDL">
+            <soap:operation soapAction="ne.wsdlparse/DeleteWSDL"/>
+            <wsdl:input name="DeleteWSDLRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteWSDLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="WSDLParser">
         <wsdl:port binding="tns:WSDLParserSOAP" name="WSDLParserSOAP">
-            <soap:address location="http://nour-Lenovo-ideapad-500-15ISK:8080/WSDLParser/WSDLParser"/>
+            <soap:address location="http://localhost:8005/wsdlparser/WSDLParser"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

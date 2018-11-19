@@ -21,6 +21,10 @@ import wsdlparse.ne.WSDLParserFault;
  */
 public class ListServicesHandler extends ServiceHandler<ListServicesRequest, ListServicesResponse> {
 
+    public ListServicesHandler() throws WSDLParserFault {
+        super();
+    }
+    
     private final static File EXTRACTING_DIR = new File(TEMP_DIR, "extracted");
 
     @Override

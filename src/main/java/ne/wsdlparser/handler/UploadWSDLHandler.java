@@ -23,7 +23,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class UploadWSDLHandler extends ServiceHandler<UploadWSDLRequest, UploadWSDLResponse> {
-
+    public UploadWSDLHandler() throws WSDLParserFault{
+        super();
+    }
     private final static File EXTRACTING_DIR = new File(TEMP_DIR, "extracted");
 
     @Override

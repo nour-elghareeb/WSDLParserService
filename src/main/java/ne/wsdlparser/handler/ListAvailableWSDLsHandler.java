@@ -17,7 +17,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class ListAvailableWSDLsHandler extends ServiceHandler<ListAvailableWSDLsRequest, ListAvailableWSDLsResponse> {
-
+    public ListAvailableWSDLsHandler() throws WSDLParserFault{
+        super();
+    }
  
     @Override
     public ListAvailableWSDLsResponse handle(ListAvailableWSDLsRequest request) throws WSDLParserFault{

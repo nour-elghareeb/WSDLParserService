@@ -86,11 +86,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DeleteWSDLRequest }
+     * 
+     */
+    public DeleteWSDLRequest createDeleteWSDLRequest() {
+        return new DeleteWSDLRequest();
+    }
+
+    /**
      * Create an instance of {@link UploadWSDLResponse }
      * 
      */
     public UploadWSDLResponse createUploadWSDLResponse() {
         return new UploadWSDLResponse();
+    }
+
+    /**
+     * Create an instance of {@link DeleteWSDLResponse }
+     * 
+     */
+    public DeleteWSDLResponse createDeleteWSDLResponse() {
+        return new DeleteWSDLResponse();
     }
 
     /**

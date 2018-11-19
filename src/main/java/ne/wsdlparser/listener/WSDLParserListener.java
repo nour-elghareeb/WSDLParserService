@@ -6,6 +6,7 @@
 package ne.wsdlparser.listener;
 
 import javax.jws.WebService;
+import ne.wsdlparser.handler.DeleteWSDLHandler;
 import ne.wsdlparser.handler.GenerateMessageESQLHandler;
 import ne.wsdlparser.handler.ListAvailableWSDLsHandler;
 import ne.wsdlparser.handler.ListOperationMessagesHandler;
@@ -61,6 +62,12 @@ public class WSDLParserListener extends com.sun.xml.ws.transport.http.servlet.WS
     public wsdlparse.ne.GenerateMessageESQLResponse generateMessageESQL(wsdlparse.ne.GenerateMessageESQLRequest parameters) throws WSDLParserFault {
         //TODO implement this method
         GenerateMessageESQLHandler handler = new GenerateMessageESQLHandler();
+        return handler.handle(parameters);
+    }
+    
+    public wsdlparse.ne.DeleteWSDLResponse deleteWSDL(wsdlparse.ne.DeleteWSDLRequest parameters) throws WSDLParserFault {
+        //TODO implement this method
+        DeleteWSDLHandler handler = new DeleteWSDLHandler();
         return handler.handle(parameters);
     }
     

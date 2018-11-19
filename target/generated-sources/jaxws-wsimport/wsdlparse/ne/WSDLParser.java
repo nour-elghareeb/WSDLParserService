@@ -128,4 +128,19 @@ public interface WSDLParser {
         throws WSDLParserFault
     ;
 
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns wsdlparse.ne.DeleteWSDLResponse
+     * @throws WSDLParserFault
+     */
+    @WebMethod(operationName = "DeleteWSDL", action = "ne.wsdlparse/DeleteWSDL")
+    @WebResult(name = "DeleteWSDLResponse", targetNamespace = "ne.wsdlparse", partName = "parameters")
+    public DeleteWSDLResponse deleteWSDL(
+        @WebParam(name = "DeleteWSDLRequest", targetNamespace = "ne.wsdlparse", partName = "parameters")
+        DeleteWSDLRequest parameters)
+        throws WSDLParserFault
+    ;
+
 }

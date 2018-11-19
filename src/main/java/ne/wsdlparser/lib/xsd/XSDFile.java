@@ -69,9 +69,12 @@ public class XSDFile {
                     }
                 }
                 filePath = filetemp.getAbsolutePath();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(1);
+            } catch (FileNotFoundException ex) {                
+                Logger.getLogger(XSDFile.class.getName()).log(Level.SEVERE, null, ex);
+                throw new WSDLException(WSDLExceptionCode.XSD_SCHEMA_FILE_NOT_FOUND, "Schema file " + filePath + " not found!");
+            } catch (IOException ex) {
+                Logger.getLogger(XSDFile.class.getName()).log(Level.SEVERE, null, ex);
+                throw new WSDLException(WSDLExceptionCode.XSD_SCHEMA_FILE_NOT_FOUND, "Schema file " + filePath + " not found!");
             }
         }
 
@@ -83,6 +86,7 @@ public class XSDFile {
             this.workingdir = file.getParent();
             this.xsd = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(file));
             this.load(filePath);
+            return;
         } catch (FileNotFoundException e) {
             throw new WSDLException(WSDLExceptionCode.XSD_SCHEMA_FILE_NOT_FOUND, "Schema file " + filePath + " not found!");
         } catch (SAXException ex) {
@@ -146,7 +150,7 @@ public class XSDFile {
         }
     }
 
-    private void load(String filePath) throws FileNotFoundException, SAXException, IOException,
+    private void load(String filePath) throws SAXException, IOException,
             ParserConfigurationException, XPathExpressionException, WSDLException {
 
         this.xPath = XPathFactory.newInstance().newXPath();

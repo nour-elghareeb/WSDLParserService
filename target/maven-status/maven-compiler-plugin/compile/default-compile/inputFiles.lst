@@ -66,11 +66,14 @@
 /home/nour/NetBeansProjects/WSDLParserService/target/generated-sources/jaxws-wsimport/wsdlparse/ne/ListAvailableWSDLsRequest.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/esql/ESQLSetterLine.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/utility/CompressionUtils.java
+/home/nour/NetBeansProjects/WSDLParserService/target/generated-sources/jaxws-wsimport/wsdlparse/ne/DeleteWSDLRequest.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/esql/ESQLBlock.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/xsd/XSDUnion.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/xsd/restriction/XSDRestrictionFractionDigits.java
+/home/nour/NetBeansProjects/WSDLParserService/target/generated-sources/jaxws-wsimport/wsdlparse/ne/DeleteWSDLResponse.java
 /home/nour/NetBeansProjects/WSDLParserService/target/generated-sources/jaxws-wsimport/wsdlparse/ne/ListServicePortsResponse.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/xsd/XSDComplexType.java
+/home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/handler/DeleteWSDLHandler.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/wsdlparser/lib/WSDLOperation.java
 /home/nour/NetBeansProjects/WSDLParserService/target/generated-sources/jaxws-wsimport/wsdlparse/ne/ListOperationMessagesRequest.java
 /home/nour/NetBeansProjects/WSDLParserService/src/main/java/ne/utility/Utility.java

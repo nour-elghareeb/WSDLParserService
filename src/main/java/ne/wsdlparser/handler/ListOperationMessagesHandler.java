@@ -25,7 +25,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class ListOperationMessagesHandler extends ServiceHandler<ListOperationMessagesRequest, ListOperationMessagesResponse> {
-
+    public ListOperationMessagesHandler() throws WSDLParserFault{
+        super();
+    }
     @Override
     public ListOperationMessagesResponse handle(ListOperationMessagesRequest request) throws WSDLParserFault {
         try {

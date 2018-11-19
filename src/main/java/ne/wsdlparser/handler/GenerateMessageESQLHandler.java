@@ -24,7 +24,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageESQLRequest, GenerateMessageESQLResponse> {
-
+    public GenerateMessageESQLHandler() throws WSDLParserFault{
+        super();
+    }
     @Override
     public GenerateMessageESQLResponse handle(GenerateMessageESQLRequest request) throws WSDLParserFault {
         try {
@@ -64,6 +66,9 @@ public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageES
         } catch (WSDLException ex) {
             Logger.getLogger(GenerateMessageESQLHandler.class.getName()).log(Level.SEVERE, null, ex);
             throw handleFault(ex.getCode().ordinal(), ex.getMessage());
+        }catch (Exception ex){
+            Logger.getLogger(GenerateMessageESQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            throw handleFault(9999, "Unexpected error occur!");
         }
     }
 

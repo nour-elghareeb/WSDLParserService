@@ -21,7 +21,9 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 public class ListPortOperationsHandler extends ServiceHandler<ListPortOperationsRequest, ListPortOperationsResponse> {
-
+    public ListPortOperationsHandler() throws WSDLParserFault{
+        super();
+    }
     @Override
     public ListPortOperationsResponse handle(ListPortOperationsRequest request) throws WSDLParserFault {
         ListPortOperationsResponse response = new ListPortOperationsResponse();
