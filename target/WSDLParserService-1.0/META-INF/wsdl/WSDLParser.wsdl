@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="WSDLParser" 
+	targetNamespace="ne.wsdlparse"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="ne.wsdlparse"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <xsd:schema targetNamespace="ne.wsdlparse" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+           <xsd:include schemaLocation="WSDLParser_InlineSchema1.xsd"></xsd:include>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="UploadWSDLRequest">
+        <wsdl:part element="tns:UploadWSDLRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="UploadWSDLResponse">
+        <wsdl:part element="tns:UploadWSDLResponse" name="parameters" />
+    </wsdl:message>
+    
+    
+    <wsdl:message name="ListServicesRequest">
+        <wsdl:part element="tns:ListServicesRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListServicesResponse">
+        <wsdl:part element="tns:ListServicesResponse" name="parameters" />
+    </wsdl:message>
+    
+    
+    <wsdl:message name="ListAvailableWSDLsRequest">
+        <wsdl:part element="tns:ListAvailableWSDLsRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListAvailableWSDLsResponse">
+        <wsdl:part element="tns:ListAvailableWSDLsResponse" name="parameters" />
+    </wsdl:message>    
+    <wsdl:message name="ListServicePortsRequest">
+        <wsdl:part element="tns:ListServicePortsRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListServicePortsResponse">
+        <wsdl:part element="tns:ListServicePortsResponse" name="parameters" />
+    </wsdl:message>    
+    <wsdl:message name="ListPortOperationsRequest">
+        <wsdl:part element="tns:ListPortOperationsRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListPortOperationsResponse">
+        <wsdl:part element="tns:ListPortOperationsResponse" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListOperationMessagesRequest">
+        <wsdl:part element="tns:ListOperationMessagesRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="ListOperationMessagesResponse">
+        <wsdl:part element="tns:ListOperationMessagesResponse" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="GenerateMessageESQLRequest">
+        <wsdl:part element="tns:GenerateMessageESQLRequest" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="GenerateMessageESQLResponse">
+        <wsdl:part element="tns:GenerateMessageESQLResponse" name="parameters" />
+    </wsdl:message>
+    
+    <wsdl:message name="WSDLParserFault">
+        <wsdl:part name="parameters" element="tns:WSDLParserFaultDetails"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="WSDLParser">
+        <wsdl:operation name="UploadWSDL">
+            <wsdl:input message="tns:UploadWSDLRequest" name="UploadWSDLRequest"/>
+            <wsdl:output message="tns:UploadWSDLResponse" name="UploadWSDLResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        
+        <wsdl:operation name="ListAvailableWSDLs">
+            <wsdl:input message="tns:ListAvailableWSDLsRequest" name="ListAvailableWSDLsRequest"/>
+            <wsdl:output message="tns:ListAvailableWSDLsResponse" name="ListAvailableWSDLsResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        
+        <wsdl:operation name="ListServices">
+            <wsdl:input message="tns:ListServicesRequest" name="ListServicesRequest"/>
+            <wsdl:output message="tns:ListServicesResponse" name="ListServicesResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListServicePorts">
+            <wsdl:input message="tns:ListServicePortsRequest" name="ListServicePortsRequest"/>
+            <wsdl:output message="tns:ListServicePortsResponse" name="ListServicePortsResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListPortOperations">
+            <wsdl:input message="tns:ListPortOperationsRequest" name="ListPortOperationsRequest"/>
+            <wsdl:output message="tns:ListPortOperationsResponse" name="ListPortOperationsResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GenerateMessageESQL">
+            <wsdl:input message="tns:GenerateMessageESQLRequest" name="GenerateMessageESQLRequest"/>
+            <wsdl:output message="tns:GenerateMessageESQLResponse" name="GenerateMessageESQLResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListOperationMessages">
+            <wsdl:input message="tns:ListOperationMessagesRequest" name="ListOperationMessagesRequest"/>
+            <wsdl:output message="tns:ListOperationMessagesResponse" name="ListOperationMessagesResponse" />
+            <wsdl:fault message="tns:WSDLParserFault" name="WSDLParserFault"></wsdl:fault>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="WSDLParserSOAP" type="tns:WSDLParser">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="UploadWSDL">
+            <soap:operation soapAction="ne.wsdlparse/UploadWSDL"/>
+            <wsdl:input name="UploadWSDLRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UploadWSDLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        
+        <wsdl:operation name="ListServices">
+            <soap:operation soapAction="ne.wsdlparse/ListServices"/>
+            <wsdl:input name="ListServicesRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListServicesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        
+        <wsdl:operation name="ListAvailableWSDLs">
+            <soap:operation soapAction="ne.wsdlparse/ListAvailableWSDLs"/>
+            <wsdl:input name="ListAvailableWSDLsRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListAvailableWSDLsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListServicePorts">
+            <soap:operation soapAction="ne.wsdlparse/ListServicePorts"/>
+            <wsdl:input name="ListServicePortsRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListServicePortsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListPortOperations">
+            <soap:operation soapAction="ne.wsdlparse/ListPortOperations"/>
+            <wsdl:input name="ListPortOperationsRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListPortOperationsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListOperationMessages">
+            <soap:operation soapAction="ne.wsdlparse/ListOperationMessages"/>
+            <wsdl:input name="ListOperationMessagesRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListOperationMessagesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GenerateMessageESQL">
+            <soap:operation soapAction="ne.wsdlparse/GenerateMessageESQL"/>
+            <wsdl:input name="GenerateMessageESQLRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GenerateMessageESQLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="WSDLParserFault">
+                <soap:fault name="WSDLParserFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="WSDLParser">
+        <wsdl:port binding="tns:WSDLParserSOAP" name="WSDLParserSOAP">
+            <soap:address location="http://nour-Lenovo-ideapad-500-15ISK:8080/WSDLParser/WSDLParser"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

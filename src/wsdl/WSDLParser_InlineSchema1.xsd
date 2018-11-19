@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="ne.wsdlparse" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="ne.wsdlparser" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <xsd:element ibmSchExtn:docRoot="true" name="UploadWSDLRequest" xmlns:tns="ne.wsdlparse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="FileName" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                <xsd:element name="FileExtension" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                <xsd:element name="MimeType" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                <xsd:element name="FileContents" type="xsd:base64Binary" maxOccurs="1" minOccurs="1">
+                </xsd:element>
+                <xsd:element name="FileSize" type="xsd:double" maxOccurs="1" minOccurs="1"/>
+                <xsd:element name="Overwrite" type="xsd:boolean" maxOccurs="1" minOccurs="1" default="false"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="UploadWSDLResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Status" type="xsd:boolean"/>
+                <xsd:element name="WSDLName" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListAvailableWSDLsRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListAvailableWSDLsResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="WSDL" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="ListServicesRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListServicesResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="Service" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="ListServicePortsRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="ServiceName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListServicePortsResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="Port" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="ListPortOperationsRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="ServiceName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="PortName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListPortOperationsResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="Operation" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="ListOperationMessagesRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="ServiceName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="PortName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="OperationName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="ListOperationMessagesResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="Message" maxOccurs="unbounded" minOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence> 
+                            <xsd:element name="Name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                            <xsd:element name="Type" maxOccurs="1" minOccurs="1">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:string">
+                                        <xsd:enumeration value="request"/>
+                                        <xsd:enumeration value="response"/>
+                                        <xsd:enumeration value="fault"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="GenerateMessageESQLRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="ServiceName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="PortName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="OperationName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="MessageName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                <xsd:element name="ESQLVerboisty" maxOccurs="unbounded" minOccurs="0" >
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="STRUCTURE"/>
+                            <xsd:enumeration value="VALUE_HELP"/>
+                            <xsd:enumeration value="DOCUMENTATION"/>
+                            <xsd:enumeration value="EMPTY"/>
+                            <xsd:enumeration value="MULTIPLICITY"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="ESQLSource" maxOccurs="1" minOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="INPUT"/>
+                            <xsd:enumeration value="OUTPUT"/>
+                            <xsd:enumeration value="LOCAL_ENVIRONMENT"/>
+                            <xsd:enumeration value="ENVIRONMENT"/>
+                            <xsd:enumeration value="LOCAL_OUPUT_ENVIRONMENT"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="UseReferenceAsVariables" maxOccurs="1" minOccurs="0" type="xsd:boolean" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="GenerateMessageESQLResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="ESQLLine" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="WSDLParserFaultDetails">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="ErrorCode" type="xsd:int">
+                </xsd:element>
+                <xsd:element name="ErrorMessage" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
