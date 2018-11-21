@@ -6,8 +6,8 @@
 package ne.wsdlparser.handler;
 
 import java.io.File;
-import ne.wsdlparser.lib.Port;
-import ne.wsdlparser.lib.Service;
+import ne.wsdlparser.lib.WSDLPort;
+import ne.wsdlparser.lib.WSDLService;
 import ne.wsdlparser.lib.WSDLManager;
 import ne.wsdlparser.lib.exception.WSDLException;
 import wsdlparse.ne.WSDLParserFault;

@@ -8,7 +8,7 @@ package ne.wsdlparser.handler;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ne.wsdlparser.lib.Service;
+import ne.wsdlparser.lib.WSDLService;
 import ne.wsdlparser.lib.exception.WSDLException;
 import wsdlparse.ne.ListServicesRequest;
 import wsdlparse.ne.ListServicesResponse;
@@ -32,8 +32,8 @@ public class ListServicesHandler extends ServiceHandler<ListServicesRequest, Lis
         try {
             ListServicesResponse response = new ListServicesResponse();
             loadWSDL(request.getWSDLName());
-            this.manager.loadServices();
-            for (Service service : this.manager.getServices()){
+            
+            for (WSDLService service : this.manager.loadServices()){
                 response.getService().add(service.getName());
             }
             return response;

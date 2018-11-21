@@ -1,17 +1,17 @@
 package ne.wsdlparser.lib;
 
-import java.io.IOException;
+import com.sun.istack.Nullable;
+import ne.wsdlparser.lib.utility.Utils;
+import ne.wsdlparser.lib.constant.WSDLProperty;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.exception.WSDLExceptionCode;
@@ -24,62 +24,73 @@ public class WSDLOperation {
     private WSDLMessage[] faults;
     private WSDLManagerRetrieval manager;
     private Node node;
-    private PortType portType;
+    private WSDLPortType portType;
     private WSDLProperty style;
     private String soapAction;
     private boolean requestLoaded;
     private boolean responseLoaded;
     private boolean faultLoaded;
 
-    public WSDLOperation(WSDLManagerRetrieval manager, PortType portType, Node node)
-            throws XPathExpressionException, WSDLException, SAXException, IOException, ParserConfigurationException {
-
+    public WSDLOperation(WSDLManagerRetrieval manager, WSDLPortType portType, Node node)
+            throws WSDLException {
         this.manager = manager;
         this.node = node;
-        setPortType(portType);
-        this.setName(Utils.getAttrValueFromNode(node, "name"));
+        this.portType = portType;
+        this.name = Utils.getAttrValueFromNode(node, "name");
         this.loadOperationDetails();
     }
-
-
+    /**
+     * Load operation details; messages, style, soapAction, etc...
+     * @throws WSDLException 
+     */
     private void loadOperationDetails()
-            throws XPathExpressionException, WSDLException, SAXException, IOException, ParserConfigurationException {
-        this.request = new WSDLMessage(this.manager, this, null);
-        this.response = new WSDLMessage(this.manager, this, null);
-        Node operation = (Node) this.manager.getXPath()
-                .compile(String.format(Locale.getDefault(), "operation[@name='%s']", this.name))
-                .evaluate(this.portType.getPort().getBinding().getNode(), XPathConstants.NODE);
-
-        Node soap = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "operation"))
-                .evaluate(operation, XPathConstants.NODE);
-
-        this.setStyle(Utils.getAttrValueFromNode(soap, "style"));
-        this.setSoapAction(Utils.getAttrValueFromNode(soap, "soapAction"));
-        Node input = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "input/body"))
-                .evaluate(operation, XPathConstants.NODE);
-        Node output = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "output/body"))
-                .evaluate(operation, XPathConstants.NODE);
-        NodeList faults = (NodeList) this.manager.getXPath().compile(String.format(Locale.getDefault(), "fault/fault"))
-                .evaluate(operation, XPathConstants.NODESET);
-
-        this.request.setEncodingStyle(Utils.getAttrValueFromNode(input, "use"));
-        this.response.setEncodingStyle(Utils.getAttrValueFromNode(output, "use"));
-        this.faults = new WSDLMessage[faults.getLength()];
-        for (int i = 0; i < faults.getLength(); i++) {
-            this.faults[i] = new FaultMessage(this.manager, this, null);
-            this.faults[i].setEncodingStyle(Utils.getAttrValueFromNode(faults.item(i), "use"));
+            throws WSDLException {
+        try {
+            this.request = new WSDLMessage(this.manager, this, null);
+            this.response = new WSDLMessage(this.manager, this, null);
+            Node operation = (Node) this.manager.getXPath()
+                    .compile(String.format(Locale.getDefault(), "operation[@name='%s']", this.name))
+                    .evaluate(this.portType.getPort().getBinding().getNode(), XPathConstants.NODE);
+            
+            Node soap = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "operation"))
+                    .evaluate(operation, XPathConstants.NODE);
+            
+            this.setStyle(Utils.getAttrValueFromNode(soap, "style"));
+            this.setSoapAction(Utils.getAttrValueFromNode(soap, "soapAction"));
+            Node input = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "input/body"))
+                    .evaluate(operation, XPathConstants.NODE);
+            Node output = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "output/body"))
+                    .evaluate(operation, XPathConstants.NODE);
+            NodeList faults = (NodeList) this.manager.getXPath().compile(String.format(Locale.getDefault(), "fault/fault"))
+                    .evaluate(operation, XPathConstants.NODESET);
+            
+            this.request.setEncodingStyle(Utils.getAttrValueFromNode(input, "use"));
+            this.response.setEncodingStyle(Utils.getAttrValueFromNode(output, "use"));
+            this.faults = new WSDLMessage[faults.getLength()];
+            for (int i = 0; i < faults.getLength(); i++) {
+                this.faults[i] = new WSDLFaultMessage(this.manager, this, null);
+                this.faults[i].setEncodingStyle(Utils.getAttrValueFromNode(faults.item(i), "use"));
+            }
+        } catch (XPathExpressionException ex) {
+            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
+            
         }
     }
-
+    /**
+     * Set operation style. RPC|Document
+     * @param value 
+     */
     private void setStyle(String value) {
-        if (value == null)
+        if (value == null) {
             this.style = this.getPortType().getPort().getBinding().getGlobalStyle();
-        else if (value.toLowerCase().trim().equals("document"))
+        } else if (value.toLowerCase().trim().equals("document")) {
             this.style = WSDLProperty.DOCUMENT;
-        else if (value.toLowerCase().trim().equals("rpc"))
+        } else if (value.toLowerCase().trim().equals("rpc")) {
             this.style = WSDLProperty.RPC;
-        else
+        } else {
             this.style = this.getPortType().getPort().getBinding().getGlobalStyle();
+        }
     }
 
     /**
@@ -89,74 +100,75 @@ public class WSDLOperation {
         return this.style;
     }
 
-    private void loadParamNode(Node paramNode, WSDLMessage message) throws WSDLException
-            {
+    /**
+     * Load message node from portType/operation/messageType node
+     *
+     * @param paramNode portType/operation/messageType node
+     * @param message Message associated with this message
+     * @throws WSDLException
+     */
+    private void loadMessageNode(Node messageTypeNode, WSDLMessage message) throws WSDLException {
         try {
             // get message name...
-            String paramMsgName[] = Utils.splitPrefixes(Utils.getAttrValueFromNode(paramNode, "message"));
+            String paramMsgName[] = Utils.splitPrefixes(Utils.getAttrValueFromNode(messageTypeNode, "message"));
             // get message node
             Node messageNode = (Node) this.manager.getXPath()
                     .compile(String.format(Locale.getDefault(), "/definitions/message[@name='%s']", paramMsgName[1]))
                     .evaluate(this.manager.getWSDLFile(), XPathConstants.NODE);
-            if (messageNode == null)
+            if (messageNode == null) {
                 return;
-            
+            }
+
             message.setNode(messageNode);
-            message.setName(Utils.getAttrValueFromNode(paramNode, "message"));
+            message.setName(Utils.getAttrValueFromNode(messageTypeNode, "message"));
             message.loadParams();
-            return;
-        } catch (XPathExpressionException ex) {
+        } catch (XPathExpressionException | WSDLException ex) {
             Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WSDLException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
         }
-        throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
+        
 
     }
 
-    private void loadFaultParams()
+    /**
+     * Load fault messages associated with this operation. If there is none, set
+     * a default SoapFault message.
+     *
+     * @throws WSDLException
+     */
+    private void loadFaultMessages()
             throws WSDLException {
         try {
-            NodeList faults = (NodeList) this.manager.getXPath().compile("fault").evaluate(this.node,
+            NodeList faultNodeTypes = (NodeList) this.manager.getXPath().compile("fault").evaluate(this.node,
                     XPathConstants.NODESET);
-            if (faults.getLength() == 0) {
-                this.faults = new WSDLMessage[] { new FaultMessage(this.manager, this, null) };
+            if (faultNodeTypes.getLength() == 0) {
+                this.faults = new WSDLMessage[]{new WSDLFaultMessage(this.manager, this, null)};
                 return;
             }
-            for (int i = 0; i < faults.getLength(); i++) {
-                this.loadParamNode(faults.item(i), this.faults[i]);
+            for (int i = 0; i < faultNodeTypes.getLength(); i++) {
+                this.loadMessageNode(faultNodeTypes.item(i), this.faults[i]);
             }
-            return;
         } catch (XPathExpressionException ex) {
             Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } catch (SAXException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
         }
-        throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
 
     }
 
-    private void loadParamNode(String paramName, WSDLMessage message)
+    /**
+     * Load message type node from portType/operation
+     *
+     * @param messageType input/output.
+     * @param message message associated with the messageType
+     * @throws WSDLException
+     */
+    private void loadMessageTypeNode(String messageType, WSDLMessage message)
             throws WSDLException {
         try {
-            // Loading param message either [input], [output], [fault]
-            Node paramNode = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "%s", paramName))
+            // Loading param message either [input], [output]
+            Node messageTypeNode = (Node) this.manager.getXPath().compile(String.format(Locale.getDefault(), "%s", messageType))
                     .evaluate(this.node, XPathConstants.NODE);
-            if (paramNode == null) {
-                return;
-            }
-            this.loadParamNode(paramNode, message);
+            this.loadMessageNode(messageTypeNode, message);
             return;
         } catch (XPathExpressionException ex) {
             Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,48 +179,77 @@ public class WSDLOperation {
 
     /**
      * @return the fault
+     * @throws ne.wsdlparser.lib.exception.WSDLException
      */
     public WSDLMessage[] getFault() throws WSDLException {
-        if (!faultLoaded) loadFaultParams();
+        if (!faultLoaded) {
+            loadFaultMessages();
+        }
         return this.faults;
     }
 
     /**
+     * Load the message if not already loaded and return it.
+     * @param index
      * @return the fault
+     * @throws ne.wsdlparser.lib.exception.WSDLException
      */
+    @Nullable
     public WSDLMessage getFault(int index) throws WSDLException {
-        if (!faultLoaded) loadFaultParams();
+        if (!faultLoaded) {
+            loadFaultMessages();
+        }
         faultLoaded = true;
-        return this.faults[index];
+        if (this.faults.length > index) {
+            return this.faults[index];
+        }
+        return null;
     }
 
     /**
+     * Load the message if not already loaded and return it.
      * @return the response
+     * @throws WSDLException
      */
     public WSDLMessage getResponse() throws WSDLException {
-        if (!responseLoaded) this.loadParamNode("output", response);
+        if (!responseLoaded) {
+            this.loadMessageTypeNode("output", response);
+        }
         responseLoaded = true;
         return response;
     }
 
     /**
-     * @return the request
+     * Load the message if not already loaded and return it.
+     * @return the request message
+     * @throws WSDLException
      */
     public WSDLMessage getRequest() throws WSDLException {
-        if (!requestLoaded) this.loadParamNode("input", request);
+        if (!requestLoaded) {
+            this.loadMessageTypeNode("input", request);
+        }
         requestLoaded = true;
         return request;
     }
-
+    /**
+     * Operation name setter
+     * @param name 
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * Operation name getter
+     * @return operation name
+     */
     public String getName() {
         return this.name;
     }
-
-    public void setPortType(PortType portType) throws XPathExpressionException {
+    /**
+     * Port type setter.
+     * @param portType
+     */
+    public void setPortType(WSDLPortType portType) {
         this.portType = portType;
     }
 
@@ -234,9 +275,9 @@ public class WSDLOperation {
     }
 
     /**
-     * @return PortType return the portType
+     * @return WSDLPortType return the portType
      */
-    public PortType getPortType() {
+    public WSDLPortType getPortType() {
         return portType;
     }
 
@@ -253,17 +294,29 @@ public class WSDLOperation {
     public void setSoapAction(String soapAction) {
         this.soapAction = soapAction;
     }
-
-    public WSDLMessage getMessageByName(String msgName) throws WSDLException {
-        if (msgName.toLowerCase().equals("request") || getRequest().getName().equals(msgName) ) return getRequest();
-        else if (msgName.toLowerCase().equals("response") || getResponse().getName().equals(msgName)) return getResponse();
-        else if (msgName.toLowerCase().equals("fault") && this.faults.length == 1) return getFault(0);
-        else if (msgName.toLowerCase().equals("fault") && this.faults.length > 1) throw new WSDLException(WSDLExceptionCode.MULTIPLE_FAULTS_FOUND,  "Multiple faults found! please request a fault by name.");
-        else{
-            for (WSDLMessage msg :getFault() ){
-                if (msg.getName() == null && msgName.equals("SOAPFault")) return msg;
-                else if (msg.getName() != null && msg.getName().equals(msgName)) return msg;
-            }            
+    /**
+     * Retrieve message by its name or type
+     * @param msgName or msgType
+     * @return Message instance
+     * @throws WSDLException 
+     */
+    public WSDLMessage getMessage(String msgName) throws WSDLException {
+        if (msgName.toLowerCase().equals("request") || getRequest().getName().equals(msgName)) {
+            return getRequest();
+        } else if (msgName.toLowerCase().equals("response") || getResponse().getName().equals(msgName)) {
+            return getResponse();
+        } else if (msgName.toLowerCase().equals("fault") && this.faults.length == 1) {
+            return getFault(0);
+        } else if (msgName.toLowerCase().equals("fault") && this.faults.length > 1) {
+            throw new WSDLException(WSDLExceptionCode.MULTIPLE_FAULTS_FOUND, "Multiple faults found! please request a fault by name.");
+        } else {
+            for (WSDLMessage msg : getFault()) {
+                if (msg.getName() == null && msgName.equals("SOAPFault")) {
+                    return msg;
+                } else if (msg.getName() != null && msg.getName().equals(msgName)) {
+                    return msg;
+                }
+            }
             throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION, "No message found with this name!");
         }
     }

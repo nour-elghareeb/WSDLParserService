@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import ne.wsdlparser.lib.Utils;
+import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManager;
 import ne.wsdlparser.lib.constant.ESQLVerbosity;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;

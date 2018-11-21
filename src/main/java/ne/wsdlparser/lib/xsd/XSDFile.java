@@ -31,7 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ne.wsdlparser.lib.Utils;
+import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.exception.WSDLExceptionCode;
 

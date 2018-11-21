@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ne.wsdlparser.lib.WSDLOperation;
-import ne.wsdlparser.lib.Port;
-import ne.wsdlparser.lib.Service;
+import ne.wsdlparser.lib.WSDLPort;
+import ne.wsdlparser.lib.WSDLService;
 import ne.wsdlparser.lib.exception.WSDLException;
 import wsdlparse.ne.ListPortOperationsRequest;
 import wsdlparse.ne.ListPortOperationsResponse;
@@ -30,8 +30,8 @@ public class ListPortOperationsHandler extends ServiceHandler<ListPortOperations
         List<String> operations = response.getOperation();
         loadWSDL(request.getWSDLName());
         try {
-            Service service = manager.loadService(request.getServiceName());
-            Port port = service.loadPort(request.getPortName());
+            WSDLService service = manager.loadService(request.getServiceName());
+            WSDLPort port = service.loadPort(request.getPortName());
             
             for (WSDLOperation op : port.getType().loadOperations()) {
                 operations.add(op.getName());

@@ -2,7 +2,7 @@ package ne.wsdlparser.lib.esql;
 
 import java.util.Locale;
 
-import ne.wsdlparser.lib.Utils;
+import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.utility.ConsoleStyle;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 

@@ -7,8 +7,8 @@ package ne.wsdlparser.handler;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ne.wsdlparser.lib.Port;
-import ne.wsdlparser.lib.Service;
+import ne.wsdlparser.lib.WSDLPort;
+import ne.wsdlparser.lib.WSDLService;
 import ne.wsdlparser.lib.exception.WSDLException;
 import wsdlparse.ne.ListServicePortsRequest;
 import wsdlparse.ne.ListServicePortsResponse;
@@ -28,9 +28,9 @@ public class ListServicePortsHandler extends ServiceHandler<ListServicePortsRequ
         try {
             ListServicePortsResponse response = new ListServicePortsResponse();
             loadWSDL(request.getWSDLName());
-            Service service = manager.loadService(request.getServiceName());
+            WSDLService service = manager.loadService(request.getServiceName());
             
-            for (Port port : service.loadPorts()) {
+            for (WSDLPort port : service.loadPorts()) {
                 response.getPort().add(port.getName());
             }
             

@@ -8,7 +8,7 @@ package ne.wsdlparser.handler;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ne.wsdlparser.lib.Service;
+import ne.wsdlparser.lib.WSDLService;
 import ne.wsdlparser.lib.WSDLMessage;
 import ne.wsdlparser.lib.WSDLOperation;
 
@@ -39,10 +39,10 @@ public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageES
             GenerateMessageESQLResponse response = new GenerateMessageESQLResponse();
 
             loadWSDL(request.getWSDLName());
-            Service service = manager.loadService(request.getServiceName());
+            WSDLService service = manager.loadService(request.getServiceName());
             WSDLOperation operation = service.loadPort(request.getPortName())
                     .getType().loadOperation(request.getOperationName());
-            WSDLMessage message = operation.getMessageByName(request.getMessageName());
+            WSDLMessage message = operation.getMessage(request.getMessageName());
             ESQLSource source;
             String s = request.getESQLSource().toUpperCase();
             try {

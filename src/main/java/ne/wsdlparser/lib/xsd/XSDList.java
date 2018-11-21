@@ -2,7 +2,7 @@ package ne.wsdlparser.lib.xsd;
 
 import org.w3c.dom.Node;
 
-import ne.wsdlparser.lib.Utils;
+import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
