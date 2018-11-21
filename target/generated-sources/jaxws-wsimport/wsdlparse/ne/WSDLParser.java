@@ -72,6 +72,21 @@ public interface WSDLParser {
      * 
      * @param parameters
      * @return
+     *     returns wsdlparse.ne.FilterAvailableWSDLsResponse
+     * @throws WSDLParserFault
+     */
+    @WebMethod(operationName = "FilterAvailableWSDLs", action = "ne.wsdlparse/FilterAvailableWSDLs")
+    @WebResult(name = "FilterAvailableWSDLsResponse", targetNamespace = "ne.wsdlparse", partName = "parameters")
+    public FilterAvailableWSDLsResponse filterAvailableWSDLs(
+        @WebParam(name = "FilterAvailableWSDLsRequest", targetNamespace = "ne.wsdlparse", partName = "parameters")
+        FilterAvailableWSDLsRequest parameters)
+        throws WSDLParserFault
+    ;
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns wsdlparse.ne.ListServicePortsResponse
      * @throws WSDLParserFault
      */

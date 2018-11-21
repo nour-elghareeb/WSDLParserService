@@ -115,22 +115,6 @@
                         <id>wsimport-generate-WSDLParser</id>
                         <phase>generate-sources</phase>
                     </execution>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>WSDLParser.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <vmArgs>
-                                <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-                            </vmArgs>
-                            <staleFile>${project.build.directory}/jaxws/stale/WSDLParser_1.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-WSDLParser_1</id>
-                        <phase>generate-sources</phase>
-                    </execution>
                 </executions>
                 <dependencies>
                     <dependency>

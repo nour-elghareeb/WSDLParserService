@@ -17,6 +17,7 @@ ne/wsdlparser/lib/esql/ESQLBlock.class
 ne/wsdlparser/lib/utility/ConsoleStyle$Color.class
 ne/wsdlparser/lib/Service.class
 ne/wsdlparser/listener/WSDLParserListener.class
+wsdlparse/ne/FilterAvailableWSDLsRequest.class
 wsdlparse/ne/ObjectFactory.class
 ne/wsdlparser/lib/esql/constant/ESQLSource.class
 ne/wsdlparser/lib/esql/ESQLSetterLine$1.class
@@ -36,6 +37,7 @@ wsdlparse/ne/WSDLParserFaultDetails.class
 ne/wsdlparser/lib/esql/ESQLSetterLine.class
 ne/wsdlparser/lib/xsd/XSDSimpleType.class
 ne/wsdlparser/lib/xsd/restriction/XSDRestrictionRange.class
+ne/wsdlparser/handler/FilterAvailableWSDLsHandler.class
 ne/wsdlparser/lib/esql/ESQLManager.class
 ne/wsdlparser/lib/xsd/XSDFile.class
 ne/wsdlparser/lib/Port.class
@@ -74,6 +76,7 @@ wsdlparse/ne/WSDLParser_Service.class
 ne/wsdlparser/handler/ServiceHandler.class
 wsdlparse/ne/GenerateMessageESQLResponse$ESQLLine.class
 ne/wsdlparser/lib/constant/ESQLVerbosity.class
+wsdlparse/ne/FilterAvailableWSDLsResponse.class
 ne/wsdlparser/lib/xsd/constant/XSDRestrictionParamType.class
 ne/wsdlparser/lib/xsd/XSDUnion.class
 wsdlparse/ne/ListPortOperationsRequest.class

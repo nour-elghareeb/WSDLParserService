@@ -190,6 +190,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link FilterAvailableWSDLsResponse }
+     * 
+     */
+    public FilterAvailableWSDLsResponse createFilterAvailableWSDLsResponse() {
+        return new FilterAvailableWSDLsResponse();
+    }
+
+    /**
+     * Create an instance of {@link FilterAvailableWSDLsRequest }
+     * 
+     */
+    public FilterAvailableWSDLsRequest createFilterAvailableWSDLsRequest() {
+        return new FilterAvailableWSDLsRequest();
+    }
+
+    /**
      * Create an instance of {@link GenerateMessageESQLResponse.ESQLLine.ESQLComment }
      * 
      */
