@@ -7,6 +7,7 @@ package ne.wsdlparser.listener;
 
 import javax.jws.WebService;
 import ne.wsdlparser.handler.DeleteWSDLHandler;
+import ne.wsdlparser.handler.FilterAvailableWSDLsHandler;
 import ne.wsdlparser.handler.GenerateMessageESQLHandler;
 import ne.wsdlparser.handler.ListAvailableWSDLsHandler;
 import ne.wsdlparser.handler.ListOperationMessagesHandler;
@@ -21,54 +22,42 @@ import wsdlparse.ne.WSDLParserFault;
  * @author nour
  */
 @WebService(serviceName = "WSDLParser", portName = "WSDLParserSOAP", endpointInterface = "wsdlparse.ne.WSDLParser", targetNamespace = "ne.wsdlparse", wsdlLocation = "WEB-INF/wsdl/WSDLParser.wsdl")
-public class WSDLParserListener extends com.sun.xml.ws.transport.http.servlet.WSServlet{
+public class WSDLParserListener extends com.sun.xml.ws.transport.http.servlet.WSServlet {
 
-     public wsdlparse.ne.UploadWSDLResponse uploadWSDL(wsdlparse.ne.UploadWSDLRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        UploadWSDLHandler handler = new UploadWSDLHandler();
-        return handler.handle(parameters);
+    public wsdlparse.ne.UploadWSDLResponse uploadWSDL(wsdlparse.ne.UploadWSDLRequest parameters) throws WSDLParserFault {
+        return new UploadWSDLHandler().handle(parameters);
     }
 
     public wsdlparse.ne.ListServicesResponse listServices(wsdlparse.ne.ListServicesRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        ListServicesHandler handler = new ListServicesHandler();
-        return handler.handle(parameters);
+        return new ListServicesHandler().handle(parameters);
     }
 
     public wsdlparse.ne.ListAvailableWSDLsResponse listAvailableWSDLs(wsdlparse.ne.ListAvailableWSDLsRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        ListAvailableWSDLsHandler handler = new ListAvailableWSDLsHandler();
-        return handler.handle(parameters);
+        return new ListAvailableWSDLsHandler().handle(parameters);
+    }
+
+    public wsdlparse.ne.FilterAvailableWSDLsResponse filterAvailableWSDLs(wsdlparse.ne.FilterAvailableWSDLsRequest parameters) throws WSDLParserFault {
+        return new FilterAvailableWSDLsHandler().handle(parameters);
     }
 
     public wsdlparse.ne.ListServicePortsResponse listServicePorts(wsdlparse.ne.ListServicePortsRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        ListServicePortsHandler handler = new  ListServicePortsHandler();
-        return handler.handle(parameters);
+        return new ListServicePortsHandler().handle(parameters);
     }
 
     public wsdlparse.ne.ListPortOperationsResponse listPortOperations(wsdlparse.ne.ListPortOperationsRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        ListPortOperationsHandler handler = new ListPortOperationsHandler();
-        return handler.handle(parameters);
+        return new ListPortOperationsHandler().handle(parameters);
     }
 
     public wsdlparse.ne.ListOperationMessagesResponse listOperationMessages(wsdlparse.ne.ListOperationMessagesRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        ListOperationMessagesHandler handler = new ListOperationMessagesHandler();
-        return handler.handle(parameters);
+        return new ListOperationMessagesHandler().handle(parameters);
     }
 
     public wsdlparse.ne.GenerateMessageESQLResponse generateMessageESQL(wsdlparse.ne.GenerateMessageESQLRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        GenerateMessageESQLHandler handler = new GenerateMessageESQLHandler();
-        return handler.handle(parameters);
+        return new GenerateMessageESQLHandler().handle(parameters);
     }
-    
+
     public wsdlparse.ne.DeleteWSDLResponse deleteWSDL(wsdlparse.ne.DeleteWSDLRequest parameters) throws WSDLParserFault {
-        //TODO implement this method
-        DeleteWSDLHandler handler = new DeleteWSDLHandler();
-        return handler.handle(parameters);
+        return new DeleteWSDLHandler().handle(parameters);
     }
-    
+
 }

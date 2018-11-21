@@ -39,16 +39,16 @@ public class ListOperationMessagesHandler extends ServiceHandler<ListOperationMe
             WSDLOperation operation = port.getType().loadOperation(request.getOperationName());
             Message requestMsg = new Message();
             requestMsg.setName(operation.getRequest().getName());
-            requestMsg.setType("request");
+            requestMsg.setType("Request");
             messages.add(requestMsg);
             Message responseMsg = new Message();
             responseMsg.setName(operation.getResponse().getName());
-            responseMsg.setType("response");
+            responseMsg.setType("Response");
             messages.add(responseMsg);
             for (WSDLMessage msg : operation.getFault()){
                 Message faultMsg = new Message();
                 faultMsg.setName(msg.getName() == null ? "SOAPFault" : msg.getName());
-                faultMsg.setType("fault");
+                faultMsg.setType("Fault");
                 messages.add(faultMsg);
             }
             return response;

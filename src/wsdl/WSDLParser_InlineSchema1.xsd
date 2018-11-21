@@ -37,6 +37,22 @@
         </xsd:complexType>
     </xsd:element>
     
+    
+    <xsd:element ibmSchExtn:docRoot="true" name="FilterAvailableWSDLsRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="WSDLName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element ibmSchExtn:docRoot="true" name="FilterAvailableWSDLsResponse">
+        <xsd:complexType>
+            <xsd:sequence>          	
+                <xsd:element name="WSDL" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
     <xsd:element ibmSchExtn:docRoot="true" name="ListServicesRequest">
         <xsd:complexType>
             <xsd:sequence>
@@ -61,8 +77,7 @@
     </xsd:element>
     <xsd:element ibmSchExtn:docRoot="true" name="DeleteWSDLResponse">
         <xsd:complexType>
-            <xsd:sequence>          	
-                
+            <xsd:sequence>          	                
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
