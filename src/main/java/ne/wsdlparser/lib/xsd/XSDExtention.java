@@ -26,10 +26,6 @@ public class XSDExtention extends XSDComplexElement<XSDElement<?>> {
 
     }
 
-    @Override
-    public String getNodeHelp() {
-        return null;
-    }
 
     /**
      * @param base the base to set

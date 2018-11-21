@@ -39,7 +39,7 @@ public class XSDRestriction extends XSDComplexElement<XSDElement> {
 
     @Override
     public String getNodeHelp() {
-        return null;
+        return "The next field has restriction.";
     }
 
     // TODO: fetch base and load children...
@@ -176,7 +176,7 @@ public class XSDRestriction extends XSDComplexElement<XSDElement> {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         if (getRestrictionParams() == null) {
             if (children == null)
                 return;
@@ -185,8 +185,7 @@ public class XSDRestriction extends XSDComplexElement<XSDElement> {
         };
         for (XSDRestrictionParam param : getRestrictionParams()) {
             this.manager.getESQLManager().addComment(ESQLVerbosity.VALUE_HELP,
-                    ConsoleStyle.addTextColor("Restriction: ", ConsoleStyle.Color.RED),
-                    this.simpletype + " -> " + param.getHelp());
+                    "Restriction: " + this.simpletype + " -> " + param.getHelp());
         }
         return;
     }

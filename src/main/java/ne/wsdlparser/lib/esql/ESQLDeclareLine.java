@@ -6,6 +6,18 @@ import ne.wsdlparser.lib.esql.constant.ESQLDataType;
 import ne.wsdlparser.lib.utility.ConsoleStyle;
 
 public class ESQLDeclareLine extends ESQLLine {
+
+    public String getParam() {
+        return param;
+    }
+
+    public ESQLDataType getType() {
+        return type;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
     private String param;
     private ESQLDataType type;
     private String defaultValue = "";

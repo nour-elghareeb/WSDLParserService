@@ -18,10 +18,6 @@ public class XSDComplexContent extends XSDComplexElement<XSDElement<?>> {
         super(manager, node, XSDChoice.class);
     }
 
-    @Override
-    public String getNodeHelp() {
-        return null;
-    }
 
     @Override
     protected Boolean isESQLPrintable() {

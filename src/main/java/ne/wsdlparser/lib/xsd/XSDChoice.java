@@ -22,7 +22,8 @@ public class XSDChoice extends XSDComplexElement<XSDElement<?>> {
 
     @Override
     public String getNodeHelp() {
-        return String.format(Locale.getDefault(), "You have a choice of the following %s parameters:",
+        return (this.children.size() <= 1) ? null :
+         String.format(Locale.getDefault(), "You have a choice of the following %s parameters:",
                 this.children.size());
     }
 
@@ -39,7 +40,7 @@ public class XSDChoice extends XSDComplexElement<XSDElement<?>> {
         while (child != null) {
             child.setUserData("tns", this.node.getUserData("tns"), null);
             XSDElement element = XSDElement.getInstance(this.manager, child);
-            element.setHelp(String.format(Locale.getDefault(), "Choice (%s) --------------", i));
+            element.setNodeHelp(String.format(Locale.getDefault(), "Choice (%s) --------------", i));
             i++;
             this.children.add(element);
             child = Utils.getNextXMLSibling(child);

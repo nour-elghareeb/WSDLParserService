@@ -75,8 +75,8 @@ public class WSDLMessage {
         return builder.toString();
     }
 
-    public void generateESQL() {
-        this.manager.getESQLManager().clearTree();
+    public void generateESQL() throws WSDLException{
+         this.manager.getESQLManager().clearAll();
         this.manager.getESQLManager().levelUp(this.prefix, this.name, this.parts.size() != 0);
         for (XSDElement element : this.parts) {
             element.toESQL();

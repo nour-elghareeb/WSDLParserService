@@ -19,7 +19,7 @@ public class FaultMessage extends WSDLMessage {
     }
 
     @Override
-    public void generateESQL() {
+    public void generateESQL() throws WSDLException{
         this.manager.getESQLManager().clearTree();
         this.manager.getESQLManager().levelUp("soapenv", "Fault", true);
         this.manager.getESQLManager().addParam(null, "faultcode", XSDSimpleElementType.STRING, null);

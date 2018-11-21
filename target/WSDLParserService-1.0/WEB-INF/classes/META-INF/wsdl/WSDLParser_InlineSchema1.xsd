@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="ne.wsdlparse" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="ne.wsdlparser" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="ne.wsdlparse" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="ne.wsdlparser" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    
+    
     <xsd:element ibmSchExtn:docRoot="true" name="UploadWSDLRequest" xmlns:tns="ne.wsdlparse">
         <xsd:complexType>
             <xsd:sequence>
@@ -62,7 +65,7 @@
                 
             </xsd:sequence>
         </xsd:complexType>
-    </xsd:element>DeleteWSDL
+    </xsd:element>
     
     <xsd:element ibmSchExtn:docRoot="true" name="ListServicePortsRequest">
         <xsd:complexType>
@@ -138,6 +141,7 @@
                 <xsd:element name="PortName" type="xsd:string" maxOccurs="1" minOccurs="1" />
                 <xsd:element name="OperationName" type="xsd:string" maxOccurs="1" minOccurs="1" />
                 <xsd:element name="MessageName" type="xsd:string" maxOccurs="1" minOccurs="1" />
+                
                 <xsd:element name="ESQLVerboisty" maxOccurs="unbounded" minOccurs="0" >
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
@@ -166,12 +170,44 @@
     </xsd:element>
     <xsd:element ibmSchExtn:docRoot="true" name="GenerateMessageESQLResponse">
         <xsd:complexType>
-            <xsd:sequence>          	
-                <xsd:element name="ESQLLine" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
+            <xsd:sequence>
+                <xsd:element name="NSLine" minOccurs="0" maxOccurs="unbounded" >
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="prefix" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                            <xsd:element name="namespace" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="ESQLLine" minOccurs="0" maxOccurs="unbounded" >
+                    <xsd:complexType>
+                        <xsd:choice>
+                            <xsd:element name="ESQLComment">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Type" type="xsd:string" />
+                                        <xsd:element name="Comment" type="xsd:string" />
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="ESQLSetter">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="XPath" type="xsd:string"></xsd:element>
+                                        <xsd:element name="ESQLSource" type="xsd:string" ></xsd:element>
+                                        <xsd:element name="ValueHelp" type="xsd:string" ></xsd:element>
+                                        <xsd:element name="FieldType" type="xsd:string" ></xsd:element>
+                                        <xsd:element name="DefaultValue" type="xsd:string" ></xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:choice>
+                    </xsd:complexType>
+                </xsd:element>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    
+       
     <xsd:element name="WSDLParserFaultDetails">
         <xsd:complexType>
             <xsd:sequence>
@@ -180,5 +216,5 @@
                 <xsd:element name="ErrorMessage" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
-    </xsd:element>
+    </xsd:element>        
 </xsd:schema>

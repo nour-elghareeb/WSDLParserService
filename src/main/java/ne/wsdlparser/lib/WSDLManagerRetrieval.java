@@ -27,6 +27,6 @@ public interface WSDLManagerRetrieval {
 
     String getNamespaceURI(String prefix);
 
-    String getPrefix(String targetTamespace);
+    String getPrefix(String targetTamespace) throws WSDLException;
 
 }

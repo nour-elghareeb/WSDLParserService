@@ -30,11 +30,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GenerateMessageESQLResponse }
+     * 
+     */
+    public GenerateMessageESQLResponse createGenerateMessageESQLResponse() {
+        return new GenerateMessageESQLResponse();
+    }
+
+    /**
      * Create an instance of {@link ListOperationMessagesResponse }
      * 
      */
     public ListOperationMessagesResponse createListOperationMessagesResponse() {
         return new ListOperationMessagesResponse();
+    }
+
+    /**
+     * Create an instance of {@link GenerateMessageESQLResponse.ESQLLine }
+     * 
+     */
+    public GenerateMessageESQLResponse.ESQLLine createGenerateMessageESQLResponseESQLLine() {
+        return new GenerateMessageESQLResponse.ESQLLine();
     }
 
     /**
@@ -54,11 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenerateMessageESQLResponse }
+     * Create an instance of {@link GenerateMessageESQLResponse.NSLine }
      * 
      */
-    public GenerateMessageESQLResponse createGenerateMessageESQLResponse() {
-        return new GenerateMessageESQLResponse();
+    public GenerateMessageESQLResponse.NSLine createGenerateMessageESQLResponseNSLine() {
+        return new GenerateMessageESQLResponse.NSLine();
     }
 
     /**
@@ -171,6 +187,22 @@ public class ObjectFactory {
      */
     public ListPortOperationsRequest createListPortOperationsRequest() {
         return new ListPortOperationsRequest();
+    }
+
+    /**
+     * Create an instance of {@link GenerateMessageESQLResponse.ESQLLine.ESQLComment }
+     * 
+     */
+    public GenerateMessageESQLResponse.ESQLLine.ESQLComment createGenerateMessageESQLResponseESQLLineESQLComment() {
+        return new GenerateMessageESQLResponse.ESQLLine.ESQLComment();
+    }
+
+    /**
+     * Create an instance of {@link GenerateMessageESQLResponse.ESQLLine.ESQLSetter }
+     * 
+     */
+    public GenerateMessageESQLResponse.ESQLLine.ESQLSetter createGenerateMessageESQLResponseESQLLineESQLSetter() {
+        return new GenerateMessageESQLResponse.ESQLLine.ESQLSetter();
     }
 
 }

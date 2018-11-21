@@ -69,7 +69,7 @@ public class XSDUnion extends XSDComplexElement {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         String[] types = new String[this.simpleTypes.size()];
         int i = 0;
         for (XSDSimpleElementType type : this.simpleTypes) {

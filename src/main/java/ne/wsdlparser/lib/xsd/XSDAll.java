@@ -21,7 +21,8 @@ public class XSDAll extends XSDComplexElement {
 
     @Override
     public String getNodeHelp() {
-        return String.format(Locale.getDefault(),
+        return (this.children.size() <= 1) ? null :
+            String.format(Locale.getDefault(),
                 "The following % children can appear in any order and each of them can appear once or not at all",
                 this.children.size());
     }

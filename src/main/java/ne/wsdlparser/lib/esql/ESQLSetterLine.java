@@ -7,6 +7,18 @@ import ne.wsdlparser.lib.utility.ConsoleStyle;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
 public class ESQLSetterLine extends ESQLLine {
+
+    public XSDSimpleElementType getXsdType() {
+        return xsdType;
+    }
+
+    public String getxPath() {
+        return xPath;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
     private XSDSimpleElementType xsdType;
     private String xPath;
     private String defaultValue;

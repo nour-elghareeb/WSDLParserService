@@ -13,7 +13,6 @@ import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
 public class XSDAny extends XSDSimpleElement<Void> {
-    protected boolean isSkippable = true;
 
     public XSDAny(WSDLManagerRetrieval manager, Node node){
 
@@ -22,7 +21,7 @@ public class XSDAny extends XSDSimpleElement<Void> {
 
     @Override
     public String getNodeHelp() {
-        return "You can add any custom element here";
+        return "You can add any custom element at this level";
     }
 
     @Override
@@ -30,8 +29,8 @@ public class XSDAny extends XSDSimpleElement<Void> {
         return false;
     }
     @Override
-    public void toESQL() {
-        // super.toESQL();
+    public void toESQL() throws WSDLException {
+        addHelpComment();
         this.manager.getESQLManager().addParam(this.prefix, "", XSDSimpleElementType.ANY, null);
     }
 }

@@ -45,7 +45,7 @@ public class XSDComplexType<T> extends XSDComplexElement<XSDElement<?>> {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         if (this.simpleType == null) {
             super.toESQL();
             return;

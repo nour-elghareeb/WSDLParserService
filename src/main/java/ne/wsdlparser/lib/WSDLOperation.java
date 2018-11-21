@@ -39,16 +39,8 @@ public class WSDLOperation {
         setPortType(portType);
         this.setName(Utils.getAttrValueFromNode(node, "name"));
         this.loadOperationDetails();
-//        this.loadParams();
     }
 
-    private void loadParams()
-            throws XPathExpressionException, WSDLException, SAXException, IOException, ParserConfigurationException {
-
-        this.loadParamNode("input", request);
-        this.loadParamNode("output", response);
-        this.loadFaultParams();
-    }
 
     private void loadOperationDetails()
             throws XPathExpressionException, WSDLException, SAXException, IOException, ParserConfigurationException {
@@ -186,6 +178,7 @@ public class WSDLOperation {
      */
     public WSDLMessage getFault(int index) throws WSDLException {
         if (!faultLoaded) loadFaultParams();
+        faultLoaded = true;
         return this.faults[index];
     }
 
@@ -194,6 +187,7 @@ public class WSDLOperation {
      */
     public WSDLMessage getResponse() throws WSDLException {
         if (!responseLoaded) this.loadParamNode("output", response);
+        responseLoaded = true;
         return response;
     }
 
@@ -202,6 +196,7 @@ public class WSDLOperation {
      */
     public WSDLMessage getRequest() throws WSDLException {
         if (!requestLoaded) this.loadParamNode("input", request);
+        requestLoaded = true;
         return request;
     }
 

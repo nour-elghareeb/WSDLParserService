@@ -21,7 +21,7 @@ public class XSDAnnotation extends XSDComplexElement {
 
     @Override
     public String getNodeHelp() {
-        return this.help;
+        return this.nodeHelp;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class XSDAnnotation extends XSDComplexElement {
         XSDSimpleElementType elementType = simpleElement.getSimpleType();
         switch (elementType) {
         case DOCUMENTATION:
-            this.help = child.getTextContent();
+            this.nodeHelp = child.getTextContent();
             return true;
         }
         return false;

@@ -11,6 +11,7 @@ import ne.wsdlparser.lib.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.esql.ESQLLine;
 import ne.wsdlparser.lib.esql.constant.ESQLDataType;
+import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
 public class XSDSimpleElement<T> extends XSDElement<T> {
@@ -23,10 +24,6 @@ public class XSDSimpleElement<T> extends XSDElement<T> {
         this.setFixedValue((T) Utils.getAttrValueFromNode(this.node, "fixed"));
     }
 
-    @Override
-    public String getNodeHelp() {
-        return help;
-    }
 
     @Override
     public void setDefaultValue(String value) {
@@ -34,7 +31,7 @@ public class XSDSimpleElement<T> extends XSDElement<T> {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         super.toESQL();
         String prefix = this.prefix;
         if (this.prefix == null) {

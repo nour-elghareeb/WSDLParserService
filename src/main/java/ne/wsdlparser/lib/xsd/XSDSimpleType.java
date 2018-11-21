@@ -72,7 +72,7 @@ public class XSDSimpleType extends XSDComplexElement<XSDElement<?>> {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         this.handleList();
         super.toESQL();
         // this.addHelpComment();

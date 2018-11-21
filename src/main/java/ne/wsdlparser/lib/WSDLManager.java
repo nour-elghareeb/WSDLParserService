@@ -213,11 +213,13 @@ public class WSDLManager implements WSDLManagerRetrieval {
         return this.esqlManager;
     }
 
-    public String getPrefix(String tns) {
+    @Override
+    public String getPrefix(String tns) throws WSDLException {
         String prefix;
         prefix = this.xPath.getNamespaceContext().getPrefix(tns);
+        
         if (prefix == null) {
-            prefix = this.xsdManager.getPrefix(tns);
+            prefix = getXSDManager().getPrefix(tns);
         }
         return prefix;
     }

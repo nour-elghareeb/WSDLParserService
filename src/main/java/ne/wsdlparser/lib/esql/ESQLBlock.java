@@ -11,11 +11,22 @@ import ne.wsdlparser.lib.esql.constant.ESQLSource;
 public class ESQLBlock {
     private WSDLManagerRetrieval manager;
     private ArrayList<ESQLLine> elementsLines;
+
+    public ArrayList<ESQLLine> getElementsLines() {
+        return elementsLines;
+    }
+
+    public ArrayList<ESQLLine> getNsDeclarations() {
+        generateNSLines();
+        return nsDeclarations;
+    }
     private ArrayList<ESQLLine> nsDeclarations;
     private HashSet<String> prefixes;
     private boolean lastWasEmpty = false;
-    private ESQLVerbosity[] verbosities = ESQLVerbosity.values();;
+    
 
+    
+    
     public ESQLBlock(WSDLManagerRetrieval manager) {
         this.manager = manager;
         this.elementsLines = new ArrayList<ESQLLine>();
@@ -56,16 +67,7 @@ public class ESQLBlock {
         }
         for (ESQLLine line : this.elementsLines) {
             line.setSource(source);
-            line.useReferences(useRef);
-            if (line instanceof ESQLCommentLine) {
-                for (ESQLVerbosity verbosity : this.verbosities) {
-                    if (verbosity.equals(((ESQLCommentLine) line).getVerbosity())) {
-                        lines.add(line.generate(useColors));
-                        break;
-                    }
-                }
-                continue;
-            }
+            line.useReferences(useRef);            
             lines.add(line.generate(useColors));
 //            lines.append(System.getProperty("line.separator"));
 
@@ -81,30 +83,7 @@ public class ESQLBlock {
             lines.append(System.getProperty("line.separator"));
         }
         return lines.toString();
-//        this.generateNSLines();
-//        for (ESQLLine line : this.nsDeclarations) {
-//            line.setSource(source);
-//            line.useReferences(useRef);
-//            lines.append(line.generate(useColors));
-//            lines.append(System.getProperty("line.separator"));
-//        }
-//        for (ESQLLine line : this.elementsLines) {
-//            line.setSource(source);
-//            line.useReferences(useRef);
-//            if (line instanceof ESQLCommentLine) {
-//                for (ESQLVerbosity verbosity : this.verbosities) {
-//                    if (verbosity.equals(((ESQLCommentLine) line).getVerbosity())) {
-//                        line.print();
-//                        break;
-//                    }
-//                }
-//                continue;
-//            }
-//            lines.append(line.generate(useColors));
-//            lines.append(System.getProperty("line.separator"));
-//
-//        }
-//        return lines.toString();
+
     }
     private void printESQL(ESQLSource source, boolean useRef){
         this.generateNSLines();
@@ -115,16 +94,7 @@ public class ESQLBlock {
         }
         for (ESQLLine line : this.elementsLines) {
             line.setSource(source);
-            line.useReferences(useRef);
-            if (line instanceof ESQLCommentLine) {
-                for (ESQLVerbosity verbosity : this.verbosities) {
-                    if (verbosity.equals(((ESQLCommentLine) line).getVerbosity())) {
-                        line.print();
-                        break;
-                    }
-                }
-                continue;
-            }
+            line.useReferences(useRef);            
             line.print();
 
         }
@@ -140,7 +110,7 @@ public class ESQLBlock {
 
     public void addEmptyLine(boolean allowMultiSuccessiveEmpty) {
         if (!this.lastWasEmpty || (allowMultiSuccessiveEmpty && this.lastWasEmpty))
-            this.elementsLines.add(new ESQLCommentLine(ESQLVerbosity.EMPTY, null));
+            this.elementsLines.add(new ESQLCommentLine(ESQLVerbosity.EMPTY_LINES, null));
         this.lastWasEmpty = true;
     }
 
@@ -151,7 +121,5 @@ public class ESQLBlock {
         this.lastWasEmpty = false;
     }
 
-    public void setVerbosity(ESQLVerbosity... verbosity) {
-        this.verbosities = verbosity;
-    }
+ 
 }

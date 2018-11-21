@@ -1,5 +1,6 @@
 package ne.wsdlparser.lib.xsd;
 
+import com.sun.istack.Nullable;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -18,8 +19,15 @@ import ne.wsdlparser.lib.exception.WSDLExceptionCode;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
 public abstract class XSDElement<T> {
-    protected String help;
+
+    protected String nodeHelp;
+    protected String valueHelp;
+
+    public String getValueHelp() {
+        return valueHelp;
+    }
     protected String name;
+
     protected T value;
     protected int maxOccurs = -1;
     protected int minOccurs = -1;
@@ -35,8 +43,13 @@ public abstract class XSDElement<T> {
     protected boolean nullifyChildrenName;
     private boolean printable;
     private String fixed;
-    public abstract String getNodeHelp();
     protected String fixedValue;
+
+    @Nullable
+    public String getNodeHelp() {
+        return null;
+    }
+
     public XSDElement(WSDLManagerRetrieval manager, Node node, Class<?> type) {
         this.type = type;
         this.node = node;
@@ -49,20 +62,24 @@ public abstract class XSDElement<T> {
         return val;
     }
 
-    public void setHelp(String help) {
-        this.help = help;
+    public void setNodeHelp(String nodeHelp) {
+        this.nodeHelp = nodeHelp;
     }
 
     protected abstract Boolean isESQLPrintable();
 
     public String getTargetTamespace() {
-        if (this.node == null) return null;
+        if (this.node == null) {
+            return null;
+        }
         String ns = (String) this.node.getUserData("tns");
         return ns;
     }
 
     public String getExplicitlySetTargetTamespace() {
-        if (this.node == null) return null;
+        if (this.node == null) {
+            return null;
+        }
         String ns = (String) this.node.getUserData("EX_tns");
         return ns;
     }
@@ -70,8 +87,9 @@ public abstract class XSDElement<T> {
     public static XSDElement<?> getInstance(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
         XSDElement xsdElement;
-        if (node == null)
+        if (node == null) {
             return null;
+        }
 
         String nodeNameWithPrefix = node.getNodeName();
         String nodeName = Utils.splitPrefixes(node.getNodeName())[1];
@@ -81,8 +99,9 @@ public abstract class XSDElement<T> {
 
         Node element = node;
         Node elementTypeNode = null;
-        if (nodeName.equals("attribute"))
+        if (nodeName.equals("attribute")) {
             return null;
+        }
         String tns = (String) element.getUserData("tns");
         if (type != null) {
             try {
@@ -129,92 +148,6 @@ public abstract class XSDElement<T> {
             }
         }
 
-        // check if type is null, then grap first child..
-        // if (nodeName.equals("element")) {
-        // if (type == null) {
-        // elementTypeNode = Utils.getFirstXMLChild(node);
-        // } else {
-        // try {
-        // xsdElement = XSDElement.getInstanceForSimpleElement(manager, element,
-        // Utils.splitPrefixes(type)[1]);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // } catch (WSDLException e) {
-        // elementTypeNode = (Node) manager.getXSDManager().find(
-        // String.format(Locale.getDefault(), "/schema/*[@name='%s']",
-        // Utils.splitPrefixes(type)[1]),
-        // XPathConstants.NODE);
-        // }
-
-        // }
-        // xsdElement = XSDElement.getInstanceForComplexElement(manager,
-        // elementTypeNode);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // }
-        // try {
-        // xsdElement = XSDElement.getInstanceForSimpleElement(manager, element,
-        // Utils.splitPrefixes(type)[1]);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // } catch (Exception e) {
-        // elementTypeNode = (Node) manager.getXSDManager().find(
-        // String.format(Locale.getDefault(), "/schema/*[@name='%s']",
-        // Utils.splitPrefixes(type)[1]),
-        // XPathConstants.NODE);
-        // xsdElement = XSDElement.getInstanceForComplexElement(manager,
-        // elementTypeNode);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // }
-
-        // if (type[1] == null) {
-        // xsdElement = XSDElement.getInstance(manager, Utils.getFirstXMLChild(node));
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // } else {
-        // try {
-        // xsdElement = XSDElement.getInstanceForSimpleElement(manager, node, type[1]);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // } catch (WSDLException e) {
-        // if (e.getCode().equals(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT)) {
-        // Node targetElementType = (Node) manager.getXSDManager().find(
-        // String.format(Locale.getDefault(), "/schema/element[@name='%s']", type[1]),
-        // XPathConstants.NODE);
-
-        // if (targetElementType != null) {
-        // xsdElement = XSDElement.getInstanceForComplexElement(manager,
-        // targetElementType);
-        // xsdElement.setName(name);
-        // return xsdElement;
-        // }
-        // }
-        // }
-
-        // }
-
-        // if (node == null)
-        // return null;
-        // String nodeName = Utils.splitPrefixes(node.getNodeName())[1];
-        // if (nodeName.equals("element"))
-        // nodeName = Utils.splitPrefixes(Utils.getAttrValueFromNode(node, "type"))[1];
-        // if (nodeName.equals("string"))
-        // return new XSDString(manager, node);
-        // else if (nodeName.equals("int") || nodeName.equals("integer"))
-        // return new XSDInteger(manager, node);
-        // else if (nodeName.equals("boolean"))
-        // return new XSDBoolean(manager, node);
-        // else if (nodeName.equals("complexType"))
-        // return XSDElement.getInstance(manager, Utils.getFirstXMLChild(node));
-        // else if (nodeName.equals("all"))
-        // return new XSDAll(manager, node);
-        // else if (nodeName.equals("sequence"))
-        // return new XSDSequence(manager, node);
-        // else if (nodeName.equals("choice"))
-        // return new XSDChoice(manager, node);
-        // else
-        // return null;
     }
 
     private void setTargetNamespace(String tns) {
@@ -225,34 +158,33 @@ public abstract class XSDElement<T> {
             throws WSDLException, XPathExpressionException, SAXException, IOException, ParserConfigurationException {
         String nodeName = Utils.splitPrefixes(node.getNodeName())[1];
 
-        if (nodeName.equals("element"))
+        if (nodeName.equals("element")) {
             throw new WSDLException(WSDLExceptionCode.XSD_NODE_IS_ELEMENT);
-        else if (nodeName.equals("all"))
+        } else if (nodeName.equals("all")) {
             return new XSDAll(manager, node);
-        else if (nodeName.equals("annotation"))
+        } else if (nodeName.equals("annotation")) {
             return new XSDAnnotation(manager, node);
-
-        else if (nodeName.equals("choice"))
+        } else if (nodeName.equals("choice")) {
             return new XSDChoice(manager, node);
-        else if (nodeName.equals("complexContent"))
+        } else if (nodeName.equals("complexContent")) {
             return new XSDComplexContent(manager, node);
-        else if (nodeName.equals("complexType"))
+        } else if (nodeName.equals("complexType")) {
             return new XSDComplexType(manager, node);
-        else if (nodeName.equals("simpleType"))
+        } else if (nodeName.equals("simpleType")) {
             return new XSDSimpleType(manager, node);
-        else if (nodeName.equals("simpleContent"))
+        } else if (nodeName.equals("simpleContent")) {
             return new XSDSimpleContent(manager, node);
-        else if (nodeName.equals("extension"))
+        } else if (nodeName.equals("extension")) {
             return new XSDExtention(manager, node);
-        else if (nodeName.equals("group"))
+        } else if (nodeName.equals("group")) {
             return new XSDGroup(manager, node);
-        else if (nodeName.equals("restriction"))
+        } else if (nodeName.equals("restriction")) {
             return new XSDRestriction(manager, node);
-        else if (nodeName.equals("sequence"))
+        } else if (nodeName.equals("sequence")) {
             return new XSDSequence(manager, node);
-        else if (nodeName.equals("union"))
+        } else if (nodeName.equals("union")) {
             return new XSDUnion(manager, node);
-        else {
+        } else {
             throw new WSDLException(WSDLExceptionCode.XSD_NOT_COMPLEX_TYPE);
         }
     }
@@ -263,12 +195,13 @@ public abstract class XSDElement<T> {
 
         try {
             XSDSimpleElementType simpleType = XSDSimpleElementType.parse(type);
-            if (simpleType.equals(XSDSimpleElementType.LIST))
+            if (simpleType.equals(XSDSimpleElementType.LIST)) {
                 element = new XSDList(manager, node);
-            else if (simpleType.equals(XSDSimpleElementType.ANY))
+            } else if (simpleType.equals(XSDSimpleElementType.ANY)) {
                 element = new XSDAny(manager, node);
-            else
+            } else {
                 element = new XSDSimpleElement(manager, node, simpleType);
+            }
             return element;
         } catch (WSDLException e) {
             throw new WSDLException(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT);
@@ -282,16 +215,13 @@ public abstract class XSDElement<T> {
         // } catch (WSDLException e) {
         // if (type.equals("string"))
         // return new XSDString(manager, node);
-
         // else if (type.equals("list")) {
         // String[] itemType = Utils.splitPrefixes(Utils.getAttrValueFromNode(node,
         // "itemType"));
         // XSDElement itemTypeCLS = XSDElement.getInstanceForSimpleElement(manager,
         // node, itemType[1]);
-
         // element = new XSDList(manager, node);
         // } else if (type.equals("boolean"))
-
         // return new XSDBoolean(manager, node);
         // else
         // throw new WSDLException(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT);
@@ -320,8 +250,9 @@ public abstract class XSDElement<T> {
      * @param value nillable
      */
     public void setNillable(String value) {
-        if (value == null)
+        if (value == null) {
             return;
+        }
         this.nillable = Boolean.parseBoolean(value);
     }
 
@@ -336,8 +267,9 @@ public abstract class XSDElement<T> {
      * @param value the maximum occur value to set
      */
     public void setMaxOccurs(String value) {
-        if (value == null)
+        if (value == null) {
             return;
+        }
         if (value.equals("unbounded")) {
             this.maxOccurs = -1;
             return;
@@ -356,8 +288,9 @@ public abstract class XSDElement<T> {
      * @param value the minumum occur value to set
      */
     public void setMinOccurs(String value) {
-        if (value == null)
+        if (value == null) {
             return;
+        }
 
         this.minOccurs = Integer.parseInt(value);
     }
@@ -387,8 +320,9 @@ public abstract class XSDElement<T> {
      * @param name the name to set
      */
     public void setName(String name) {
-        if (name == null && this.name != null)
+        if (name == null && this.name != null) {
             return;
+        }
         String[] tmp = Utils.splitPrefixes(name);
         this.prefix = tmp[0];
         this.name = tmp[1];
@@ -426,14 +360,31 @@ public abstract class XSDElement<T> {
         return this.prefix;
     }
 
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
         this.addHelpComment();
     }
 
     protected void addHelpComment() {
-        this.manager.getESQLManager().addComment(ESQLVerbosity.VALUE_HELP, this.getNodeHelp());
+        if (this instanceof XSDAnnotation) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.DOCUMENTATION, this.getNodeHelp());
+        } else {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.NODE_HELP, this.getNodeHelp());
+        }
+
         if (this.minOccurs == 0) {
             this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, "Optional");
+        } else if (this.minOccurs == 1 && this.minOccurs == this.maxOccurs) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Required"));
+        } else if (this.minOccurs > 1 && this.minOccurs == this.maxOccurs) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Must appear exactly %s times", this.minOccurs));
+        } else if (this.minOccurs > 1) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Must appear more than %s and less than %s", this.minOccurs, this.maxOccurs));
+        }
+        if (this.nillable) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.VALUE_HELP, String.format(Locale.getDefault(), "This field is nillable."));
+        }
+        if (this.fixedValue != null) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.VALUE_HELP, String.format(Locale.getDefault(), "This field has a fixed value: %s", this.fixedValue));
         }
     }
 

@@ -36,7 +36,7 @@ public enum XSDSimpleElementType {
     BOOLEAN("boolean", "Boolean value, true or false", ESQLDataType.BOOLEAN),
     HEX_BINRARY("hexBinary", "hexadecimal-encoded binary data", ESQLDataType.BLOB), APP_INFO("appInfo", "", ESQLDataType.ESQLComment),
     DOCUMENTATION("documentation", "", ESQLDataType.ESQLComment), LIST("list", "list seperated by a space", ESQLDataType.CHARACTER),
-    UNION_CHILDREN("", "Union of multiple types.", ESQLDataType.CHARACTER), ANY("any", "You can put any elements at this level", null),
+    UNION_CHILDREN("", "Union of multiple types.", ESQLDataType.CHARACTER), ANY("any", "You can put any elements at this level", ESQLDataType.NULL),
     ENTITIES("", "Union of multiple types.", ESQLDataType.CHARACTER);
 
     private String desc;

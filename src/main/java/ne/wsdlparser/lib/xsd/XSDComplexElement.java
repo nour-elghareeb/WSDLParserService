@@ -63,7 +63,7 @@ public abstract class XSDComplexElement<T> extends XSDElement<T> {
     }
 
     @Override
-    public void toESQL() {
+    public void toESQL() throws WSDLException{
 
         String prefix = this.prefix;
         if (this.prefix == null) {
@@ -98,10 +98,6 @@ public abstract class XSDComplexElement<T> extends XSDElement<T> {
         // return "";
     }
 
-    @Override
-    public String getNodeHelp() {
-        return help;
-    }
 
     @Override
     public void nullifyChildrenName() {

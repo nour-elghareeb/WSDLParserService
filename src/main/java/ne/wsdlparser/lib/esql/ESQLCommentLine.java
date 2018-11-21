@@ -5,6 +5,14 @@ import ne.wsdlparser.lib.utility.ConsoleStyle;
 
 public class ESQLCommentLine extends ESQLLine {
     private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getTitle() {
+        return title;
+    }
     private String title;
     private ESQLVerbosity verbosityType;
 
