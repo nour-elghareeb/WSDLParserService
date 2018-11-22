@@ -52,7 +52,7 @@ public abstract class XSDElement {
     }
 
     public void setQualified(boolean qualified) {
-        if (this.node != null){
+        if (this.node != null) {
             this.node.setUserData("qualified", qualified, null);
         }
         this.qualified = qualified;
@@ -124,7 +124,7 @@ public abstract class XSDElement {
                 return this.explicitTNS == null ? this.manager.getTargetNameSpace() : null;
             }
             return null;
-        }        
+        }
         String ns = (String) this.node.getUserData("tns");
         if (ns == null) {
             if (isQualified()) {
@@ -384,14 +384,15 @@ public abstract class XSDElement {
     }
 
     /**
-     * return minmum occurrance..
+     * return minimum occurrence..
+     * @return this node min occurs or -1;
      */
     public int getMinOccurs() {
         return this.minOccurs;
     }
 
     /**
-     * @param value the minumum occur value to set
+     * @param value the miniumum occur value to set
      */
     public void setMinOccurs(String value) {
         if (value == null) {
@@ -525,6 +526,13 @@ public abstract class XSDElement {
         return false;
     }
 
+    /**
+     * get the appropriate prefix for element based on if it come from another
+     * schema and whether that schema use qualified form or not.
+     *
+     * @return prefix or null
+     * @throws WSDLException
+     */
     protected String getPrintablePrefix() throws WSDLException {
         String _prefix = this.prefix;
         if (this.prefix == null) {

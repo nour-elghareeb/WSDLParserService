@@ -1,28 +1,21 @@
 package ne.wsdlparser.lib.xsd;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
-import ne.wsdlparser.lib.esql.ESQLLine;
 import ne.wsdlparser.lib.exception.WSDLException;
-import ne.wsdlparser.lib.utility.ConsoleStyle;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
-import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionParam;
-
+/**
+ * Simple type XSD implementation.
+ * @author nour
+ */
 public class XSDSimpleType extends XSDComplexElement {
-    private String[] restrictionStringRepresntation;
     private XSDSimpleElementType simpleType;
     private boolean hasList;
     private boolean hasUnion;

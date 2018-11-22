@@ -24,13 +24,14 @@ public class XSDSimpleContent extends XSDComplexElement {
     protected Boolean isESQLPrintable() {
         return true;
     }
-
+  
     @Override
     protected boolean validateChild(Node child, XSDElement element)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
 
         // child is extention..
         if (element instanceof XSDExtention) {
+            
             this.simpleType = ((XSDExtention) element).getSimpleType();
             return false;
         }
