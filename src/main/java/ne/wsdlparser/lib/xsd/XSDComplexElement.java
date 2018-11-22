@@ -135,7 +135,7 @@ public abstract class XSDComplexElement extends XSDElement {
             // this.manager.getESQLManager().addEmptyLine(false);
             
         }
-        this.manager.getESQLManager().levelDown(this.name, getPrintablePrefix(), this.hasPrintable());
+        this.manager.getESQLManager().levelDown(getPrintablePrefix(), this.name, this.hasPrintable());
     }
 
     /**

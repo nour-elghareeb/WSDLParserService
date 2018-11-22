@@ -117,7 +117,7 @@ public class ESQLManager {
      * @param param element name
      * @param hasChildren true if it had had children
      */
-    public void levelDown(String param, String prefix, boolean hasChildren) {
+    public void levelDown(String prefix, String param, boolean hasChildren) {
         // if (!this.levelIsRaised)
         // return;
         if (param == null) {

@@ -84,7 +84,7 @@ public class WSDLMessage {
         for (XSDElement element : this.parts) {
             element.toESQL();
         }
-        this.manager.getESQLManager().levelDown(this.name, this.prefix, !this.parts.isEmpty());
+        this.manager.getESQLManager().levelDown(this.prefix, this.name, !this.parts.isEmpty());
     }
     /**
      * Load message params for Document operation style.

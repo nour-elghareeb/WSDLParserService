@@ -45,7 +45,7 @@ public class WSDLFaultMessage extends WSDLMessage {
         for (XSDElement element : this.parts) {
             element.toESQL();
         }
-        this.manager.getESQLManager().levelDown(this.name, this.prefix, !this.parts.isEmpty());
+        this.manager.getESQLManager().levelDown(this.prefix, this.name, !this.parts.isEmpty());
         this.manager.getESQLManager().levelDown(null, "detail", !this.parts.isEmpty());
         this.manager.getESQLManager().levelDown("soapenv", "Fault", true);
     }
