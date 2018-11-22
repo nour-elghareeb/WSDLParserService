@@ -64,7 +64,7 @@ public class ESQLBlock {
      *
      * @return
      */
-    private ArrayList<ESQLLine> generateNSLines() {
+    public ArrayList<ESQLLine> generateNSLines() {
         this.nsDeclarations.clear();
         for (String prefix : prefixes) {
             this.nsDeclarations

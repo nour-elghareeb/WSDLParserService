@@ -13,7 +13,7 @@ import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 
-public class XSDChoice extends XSDComplexElement<XSDElement<?>> {
+public class XSDChoice extends XSDComplexElement {
 
     public XSDChoice(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {

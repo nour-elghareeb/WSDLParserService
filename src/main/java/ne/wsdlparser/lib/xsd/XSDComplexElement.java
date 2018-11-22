@@ -14,9 +14,9 @@ import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 
-public abstract class XSDComplexElement<T> extends XSDElement<T> {
+public abstract class XSDComplexElement extends XSDElement {
 
-    protected ArrayList<XSDElement<T>> children = new ArrayList<XSDElement<T>>();
+    protected ArrayList<XSDElement> children = new ArrayList<>();
     protected boolean hasRestriction = false;
     protected XSDRestriction restriction;
 
@@ -26,15 +26,15 @@ public abstract class XSDComplexElement<T> extends XSDElement<T> {
         this.loadChildren();
     }
 
-    public ArrayList<XSDElement<T>> getChildren() {
+    public ArrayList<XSDElement> getChildren() {
         return this.children;
     }
 
-    public void addChildren(Collection<XSDElement<T>> elements) {
+    public void addChildren(Collection<XSDElement> elements) {
         this.children.addAll(elements);
     }
 
-    public void addChild(XSDElement<T> element) {
+    public void addChild(XSDElement element) {
         this.children.add(element);
     }
 
@@ -118,7 +118,7 @@ public abstract class XSDComplexElement<T> extends XSDElement<T> {
         return false;
     }
     @Override
-    protected void setFixedValue(T fixedValue) {
-
+    protected void setFixedValue(String fixedValue) {
+        
     }
 }

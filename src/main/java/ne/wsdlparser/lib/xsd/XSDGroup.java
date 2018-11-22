@@ -15,7 +15,7 @@ import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 
-public class XSDGroup extends XSDComplexElement<XSDElement> {
+public class XSDGroup extends XSDComplexElement {
     private String reference;
 
     public XSDGroup(WSDLManagerRetrieval manager, Node node)
@@ -38,7 +38,7 @@ public class XSDGroup extends XSDComplexElement<XSDElement> {
         Node refElementNode = (Node) this.manager.getXSDManager()
                 .find(String.format(Locale.getDefault(), "/schema/*[@name='%s']", this.reference), XPathConstants.NODE);
         XSDElement xsdRefElement = XSDElement.getInstance(this.manager, refElementNode);
-        this.children = new ArrayList<XSDElement<XSDElement>>();
+        this.children = new ArrayList();
         this.children.add(xsdRefElement);
     }
 

@@ -14,14 +14,14 @@ import ne.wsdlparser.lib.esql.constant.ESQLDataType;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
-public class XSDSimpleElement<T> extends XSDElement<T> {
+public class XSDSimpleElement<T> extends XSDElement {
     private XSDSimpleElementType simpleType;
 
     public XSDSimpleElement(WSDLManagerRetrieval manager, Node node, XSDSimpleElementType type) {
         super(manager, node, String.class);
         this.simpleType = type;
         this.setDefaultValue(Utils.getAttrValueFromNode(this.node, "default"));
-        this.setFixedValue((T) Utils.getAttrValueFromNode(this.node, "fixed"));
+        this.setFixedValue(Utils.getAttrValueFromNode(this.node, "fixed"));
     }
 
 
@@ -64,7 +64,7 @@ public class XSDSimpleElement<T> extends XSDElement<T> {
     }
 
     @Override
-    protected void setFixedValue(T fixedValue) {
+    protected void setFixedValue(String fixedValue) {
         if (fixedValue != null)
             this.fixedValue = this.prepareElementValue(String.valueOf(fixedValue));
     }

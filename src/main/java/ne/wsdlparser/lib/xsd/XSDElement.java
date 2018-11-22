@@ -18,17 +18,16 @@ import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.exception.WSDLExceptionCode;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
-public abstract class XSDElement<T> {
+public abstract class XSDElement {
 
     protected String nodeHelp;
     protected String valueHelp;
-
+    protected String value;
     public String getValueHelp() {
         return valueHelp;
     }
     protected String name;
 
-    protected T value;
     protected int maxOccurs = -1;
     protected int minOccurs = -1;
     protected String defaultValue;
@@ -84,7 +83,7 @@ public abstract class XSDElement<T> {
         return ns;
     }
 
-    public static XSDElement<?> getInstance(WSDLManagerRetrieval manager, Node node)
+    public static XSDElement getInstance(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
         XSDElement xsdElement;
         if (node == null) {
@@ -234,10 +233,10 @@ public abstract class XSDElement<T> {
         this.setMaxOccurs(Utils.getAttrValueFromNode(this.node, "maxOccurs"));
         this.setMinOccurs(Utils.getAttrValueFromNode(this.node, "minOccurs"));
         this.setDefaultValue(Utils.getAttrValueFromNode(this.node, "default"));
-        this.setFixedValue((T) Utils.getAttrValueFromNode(this.node, "fixed"));
+        this.setFixedValue(Utils.getAttrValueFromNode(this.node, "fixed"));
     }
 
-    protected abstract void setFixedValue(T fixedValue);
+    protected abstract void setFixedValue(String fixedValue);
 
     /**
      * return if the element is nillable..
@@ -305,7 +304,7 @@ public abstract class XSDElement<T> {
     /**
      * @return the default value
      */
-    public T getDefaultValue() {
+    public String getDefaultValue() {
         return this.value;
     }
 
@@ -341,14 +340,14 @@ public abstract class XSDElement<T> {
     /**
      * @return the value
      */
-    public T getValue() {
+    public String getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(T value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

@@ -12,7 +12,7 @@ import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
-public class XSDComplexType<T> extends XSDComplexElement<XSDElement<?>> {
+public class XSDComplexType<T> extends XSDComplexElement {
 
     private XSDSimpleElementType simpleType;
     private boolean hasList;

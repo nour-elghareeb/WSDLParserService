@@ -16,7 +16,7 @@ import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
-public class XSDExtention extends XSDComplexElement<XSDElement<?>> {
+public class XSDExtention extends XSDComplexElement {
     private String base;
     private XSDSimpleElementType simpleType;
 
@@ -50,7 +50,7 @@ public class XSDExtention extends XSDComplexElement<XSDElement<?>> {
             XSDComplexElement baseChild;
             try {
                 baseChild = (XSDComplexElement) getChildren().get(0);
-                for (XSDElement el : (ArrayList<XSDComplexElement>) baseChild.getChildren()) {
+                for (XSDElement el : (ArrayList<XSDElement>) baseChild.getChildren()) {
                     el.explicitlySetTargetNameSpace(this.getTargetTamespace());
                     baseElement.addChild(el);
                 }
@@ -58,7 +58,7 @@ public class XSDExtention extends XSDComplexElement<XSDElement<?>> {
 
             }
 
-            this.children = new ArrayList<XSDElement<XSDElement<?>>>();
+            this.children = new ArrayList<XSDElement>();
             this.children.add(baseElement);
         }
 

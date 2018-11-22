@@ -3,8 +3,6 @@ package ne.wsdlparser.lib.esql;
 import com.sun.istack.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManager;
@@ -19,7 +17,6 @@ public class ESQLManager {
     private final WSDLManager manager;
     private final ESQLBlock block;
     private final ArrayList<String> paramTree;
-    private final boolean levelIsRaised = false;
     private ESQLVerbosity[] verbosities;
     /**
      * 

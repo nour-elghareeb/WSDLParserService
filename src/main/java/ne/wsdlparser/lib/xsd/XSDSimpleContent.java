@@ -10,11 +10,9 @@ import org.xml.sax.SAXException;
 
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
-import ne.wsdlparser.lib.utility.ConsoleStyle;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
-import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionParam;
 
-public class XSDSimpleContent extends XSDComplexElement<XSDElement<?>> {
+public class XSDSimpleContent extends XSDComplexElement {
     private XSDSimpleElementType simpleType;
 
     public XSDSimpleContent(WSDLManagerRetrieval manager, Node node)

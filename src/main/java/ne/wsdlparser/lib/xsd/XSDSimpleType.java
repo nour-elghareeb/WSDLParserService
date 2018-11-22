@@ -21,7 +21,7 @@ import ne.wsdlparser.lib.utility.ConsoleStyle;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionParam;
 
-public class XSDSimpleType extends XSDComplexElement<XSDElement<?>> {
+public class XSDSimpleType extends XSDComplexElement {
     private String[] restrictionStringRepresntation;
     private XSDSimpleElementType simpleType;
     private boolean hasList;

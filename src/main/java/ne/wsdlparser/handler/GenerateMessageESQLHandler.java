@@ -66,7 +66,7 @@ public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageES
             }
             message.generateESQL();
 
-            ArrayList<ESQLLine> nsLines = this.manager.getESQLManager().getESQLBlock().getNsDeclarations();
+            ArrayList<ESQLLine> nsLines = this.manager.getESQLManager().getESQLBlock().generateNSLines();
             nsLines.stream().map((line) -> (ESQLDeclareLine) line).forEachOrdered((dcLine) -> {
                 GenerateMessageESQLResponse.NSLine nsLine = new GenerateMessageESQLResponse.NSLine();
                 nsLine.setPrefix(dcLine.getParam());

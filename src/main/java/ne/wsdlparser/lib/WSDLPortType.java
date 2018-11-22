@@ -61,7 +61,7 @@ public class WSDLPortType {
                 this.operations.add(operation);
             }
             return this.operations;
-        } catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException ex) {
+        } catch (XPathExpressionException ex) {
             Logger.getLogger(WSDLPortType.class.getName()).log(Level.SEVERE, null, ex);
         }
         throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
@@ -90,7 +90,7 @@ public class WSDLPortType {
                 throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION, "No operation found with this name");
             }
             return new WSDLOperation(this.manager, this, opNode);
-        } catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException ex) {
+        } catch (XPathExpressionException ex) {
             Logger.getLogger(WSDLPortType.class.getName()).log(Level.SEVERE, null, ex);
         } catch (WSDLException ex) {
             throw ex;

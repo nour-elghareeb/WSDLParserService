@@ -27,7 +27,7 @@ import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionParam;
 import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionPattern;
 import ne.wsdlparser.lib.xsd.restriction.XSDRestrictionRange;
 
-public class XSDRestriction extends XSDComplexElement<XSDElement> {
+public class XSDRestriction extends XSDComplexElement {
     private boolean isSimpleElement = true;
     private ArrayList<XSDRestrictionParam> params;
     private String base;
