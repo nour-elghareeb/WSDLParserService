@@ -14,30 +14,75 @@ import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 
+/**
+ * An implementation for any XSD type that can/may have children.
+ *
+ * @author nour
+ */
 public abstract class XSDComplexElement extends XSDElement {
 
-    protected ArrayList<XSDElement> children = new ArrayList<>();
-    protected boolean hasRestriction = false;
+    protected ArrayList<XSDElement> children;
+    protected boolean hasRestriction;
     protected XSDRestriction restriction;
 
-    public XSDComplexElement(WSDLManagerRetrieval manager, Node node, Class<?> classType)
+    /**
+     * Load its children automatically.
+     *
+     * @param manager WSDLManager instance injection.
+     * @param node node associated with this element
+     * @throws XPathExpressionException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws WSDLException
+     */
+    public XSDComplexElement(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, classType);
+        super(manager, node);
+        this.hasRestriction = false;
+        this.children = new ArrayList<>();
         this.loadChildren();
     }
 
+    /**
+     * Children getter.
+     *
+     * @return
+     */
     public ArrayList<XSDElement> getChildren() {
         return this.children;
     }
 
+    /**
+     * Add children as a list
+     *
+     * @param elements
+     */
     public void addChildren(Collection<XSDElement> elements) {
         this.children.addAll(elements);
     }
 
+    /**
+     * Add child to children list.
+     *
+     * @param element
+     */
     public void addChild(XSDElement element) {
         this.children.add(element);
     }
 
+    /**
+     * Validate each child before inserting it into the children list.
+     *
+     * @param child current child node
+     * @param element current child element
+     * @return true to add the element to the children list, false otherwise.
+     * @throws XPathExpressionException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws WSDLException
+     */
     protected boolean validateChild(Node child, XSDElement element)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
 
@@ -48,57 +93,54 @@ public abstract class XSDComplexElement extends XSDElement {
         return true;
     }
 
+    /**
+     * Load children recursively
+     *
+     * @throws XPathExpressionException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws WSDLException
+     */
     protected void loadChildren()
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
         Node child = Utils.getFirstXMLChild(this.node);
 
         while (child != null) {
             child.setUserData("tns", this.node.getUserData("tns"), null);
+            child.setUserData("qualified", this.node.getUserData("qualified"), null);
             XSDElement element = XSDElement.getInstance(this.manager, child);
 
-            if (element != null && this.validateChild(child, element) && element.getMaxOccurs() != 0)
+            if (element != null && this.validateChild(child, element) && element.getMaxOccurs() != 0) {
                 this.children.add(element);
+            }
             child = Utils.getNextXMLSibling(child);
         }
     }
 
+    /**
+     * generate this element ESQL and its children.
+     *
+     * @throws WSDLException
+     */
     @Override
-    public void toESQL() throws WSDLException{
-
-        String prefix = this.prefix;
-        if (this.prefix == null) {
-            String ns = this.getExplicitlySetTargetTamespace();
-            if (ns == null) {
-                ns = this.getTargetTamespace();
-            }
-            if (!this.manager.getTargetNameSpace().equals(ns)) {
-                prefix = this.manager.getPrefix(ns);
-            }
-        }
-
+    public void toESQL() throws WSDLException {
         if (this.maxOccurs != 0) {
             super.toESQL();
-            this.manager.getESQLManager().levelUp(prefix, this.name, this.hasPrintable());
+            this.manager.getESQLManager().levelUp(getPrintablePrefix(), this.name, this.hasPrintable());
 
             for (XSDElement element : this.children) {
                 element.toESQL();
             }
+            // this.manager.getESQLManager().addEmptyLine(false);
+            
         }
-        // this.manager.getESQLManager().addEmptyLine(false);
-        this.manager.getESQLManager().levelDown(this.name, prefix, this.hasPrintable());
-
-        // String temp = xPath;
-        // if (name != null && !xPath.contains(this.name))
-        // temp += "." + Utils.getParamWithPrefix(this.prefix, this.name);
-
-        // ArrayList<ESQLLine> esql = new ArrayList<ESQLLine>();
-        // for (XSDElement element : this.children) {
-        // element.toESQL(manager, temp);
-        // }
-        // return "";
+        this.manager.getESQLManager().levelDown(this.name, getPrintablePrefix(), this.hasPrintable());
     }
 
-
+    /**
+     * Nullify this node name and prefix along with all its children
+     */
     @Override
     public void nullifyChildrenName() {
         super.nullifyChildrenName();
@@ -109,16 +151,24 @@ public abstract class XSDComplexElement extends XSDElement {
         }
     }
 
+    /**
+     * Check if this element has any param to print
+     *
+     * @return true if this element or any of its children have any param to
+     * print
+     */
     @Override
     protected boolean hasPrintable() {
         for (XSDElement element : this.children) {
-            if (element.hasPrintable())
+            if (element.hasPrintable()) {
                 return true;
+            }
         }
         return false;
     }
+
     @Override
     protected void setFixedValue(String fixedValue) {
-        
+
     }
 }

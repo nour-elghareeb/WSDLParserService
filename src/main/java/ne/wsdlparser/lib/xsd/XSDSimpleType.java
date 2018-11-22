@@ -30,7 +30,7 @@ public class XSDSimpleType extends XSDComplexElement {
 
     public XSDSimpleType(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDSimpleType.class);
+        super(manager, node);
     }
 
     @Override
@@ -75,9 +75,9 @@ public class XSDSimpleType extends XSDComplexElement {
     public void toESQL() throws WSDLException{
         this.handleList();
         super.toESQL();
-        // this.addHelpComment();
+        // this.addHelpComments();
         String val = this.fixedValue == null ? this.defaultValue : this.fixedValue;
-        this.manager.getESQLManager().addParam(this.prefix, this.name, this.simpleType, val);
+        this.manager.getESQLManager().addParam(getPrintablePrefix(), this.name, this.simpleType, val);
     }
 
     @Override

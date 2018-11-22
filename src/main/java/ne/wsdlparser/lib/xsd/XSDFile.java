@@ -50,8 +50,10 @@ public class XSDFile {
     ;
     private final static String NEW_ROOT = "/root/";
     private Boolean isRootModified = false;
+    private boolean qualified;
 
     public XSDFile(String filePath, String namespace) throws WSDLException, ParserConfigurationException {
+
         if (Utils.validateURI(filePath)) {
 
             String dir = System.getProperty("java.io.tmpdir");
@@ -67,9 +69,10 @@ public class XSDFile {
                     while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                         fileOutputStream.write(dataBuffer, 0, bytesRead);
                     }
+                
                 }
                 filePath = filetemp.getAbsolutePath();
-            } catch (FileNotFoundException ex) {                
+            } catch (FileNotFoundException ex) {
                 Logger.getLogger(XSDFile.class.getName()).log(Level.SEVERE, null, ex);
                 throw new WSDLException(WSDLExceptionCode.XSD_SCHEMA_FILE_NOT_FOUND, "Schema file " + filePath + " not found!");
             } catch (IOException ex) {
@@ -85,7 +88,7 @@ public class XSDFile {
             File file = new File(filePath);
             this.workingdir = file.getParent();
             this.xsd = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(file));
-            this.load(filePath);
+            this.load();
             return;
         } catch (FileNotFoundException e) {
             throw new WSDLException(WSDLExceptionCode.XSD_SCHEMA_FILE_NOT_FOUND, "Schema file " + filePath + " not found!");
@@ -105,6 +108,7 @@ public class XSDFile {
             this.workingdir = workingdir;
 
             this.xsd = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+
             Element root = this.xsd.createElement("root");
             this.xsd.appendChild(root);
             this.targetNS = null;
@@ -114,7 +118,7 @@ public class XSDFile {
                 node = this.xsd.importNode(node, true);
                 root.appendChild(node);
             }
-            this.load(filePath);
+            this.load();
             return;
         } catch (SAXException ex) {
             Logger.getLogger(XSDFile.class.getName()).log(Level.SEVERE, null, ex);
@@ -150,12 +154,21 @@ public class XSDFile {
         }
     }
 
-    private void load(String filePath) throws SAXException, IOException,
+    private void setQualified() throws XPathExpressionException {
+        Node schema = (Node) this.xPath.compile(this.prepareXPath("schema")).evaluate(this.xsd, XPathConstants.NODE);
+        String temp = Utils.getAttrValueFromNode(schema, "elementFormDefault");
+        this.qualified = temp != null && temp.toLowerCase().equals("qualified");
+    }
+
+    private void load() throws SAXException, IOException,
             ParserConfigurationException, XPathExpressionException, WSDLException {
 
         this.xPath = XPathFactory.newInstance().newXPath();
+
         this.loadNamespaces();
         // load includes if any
+
+        setQualified();
         NodeList includes = (NodeList) this.xPath.compile(this.prepareXPath("schema/include")).evaluate(this.xsd,
                 XPathConstants.NODESET);
         for (int i = 0; i < includes.getLength(); i++) {
@@ -254,9 +267,15 @@ public class XSDFile {
         Object node = null;
         int i = 0;
         node = this.find(newxpath, this.xsd, returnType);
+        
 
         if (node == null) {
             node = this.findInChildren(xpath, returnType);
+        } else {
+            ((Node) node).setUserData("qualified", isQualified(), null);
+            if (isQualified()) {                
+                ((Node) node).setUserData("tns", this.targetNS, null);
+            }
         }
 
         return node;
@@ -269,6 +288,7 @@ public class XSDFile {
             if (node != null) {
                 if (node instanceof Node && ((Node) node).getUserData("tns") == null) {
                     ((Node) node).setUserData("tns", file.targetNS, null);
+                    ((Node) node).setUserData("qualified", file.isQualified(), null);
                 }
                 return node;
             }
@@ -279,6 +299,7 @@ public class XSDFile {
             if (node != null) {
                 if (node instanceof Node && ((Node) node).getUserData("tns") == null) {
                     ((Node) node).setUserData("tns", file.targetNS, null);
+                    ((Node) node).setUserData("qualified", file.isQualified(), null);
                 }
                 return node;
             }
@@ -288,6 +309,10 @@ public class XSDFile {
             if (node != null) {
                 if (node instanceof Node && ((Node) node).getUserData("tns") == null) {
                     ((Node) node).setUserData("tns", entry.getKey(), null);
+
+                    Node nn = entry.getValue();
+                    String elementFormDefault = Utils.getAttrValueFromNode(nn, "elementFormDefault");
+                    ((Node) node).setUserData("qualified", elementFormDefault != null && elementFormDefault.toLowerCase().equals("qualified"), null);
                 }
                 return node;
             }
@@ -339,6 +364,10 @@ public class XSDFile {
         }
 
         return null;
+    }
+
+    private boolean isQualified() {
+        return this.qualified;
     }
 
 }

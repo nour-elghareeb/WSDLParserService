@@ -21,7 +21,7 @@ public class XSDAll extends XSDComplexElement {
 
     public XSDAll(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDAll.class);
+        super(manager, node);
     }
 
     @Override

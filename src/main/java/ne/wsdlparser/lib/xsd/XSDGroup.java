@@ -20,7 +20,7 @@ public class XSDGroup extends XSDComplexElement {
 
     public XSDGroup(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDExtention.class);
+        super(manager, node);
     }
 
     @Override

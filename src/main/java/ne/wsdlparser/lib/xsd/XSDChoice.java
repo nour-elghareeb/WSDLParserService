@@ -17,7 +17,7 @@ public class XSDChoice extends XSDComplexElement {
 
     public XSDChoice(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDChoice.class);
+        super(manager, node);
     }
 
     @Override

@@ -15,7 +15,7 @@ import ne.wsdlparser.lib.exception.WSDLException;
 public class XSDComplexContent extends XSDComplexElement {
     public XSDComplexContent(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDChoice.class);
+        super(manager, node);
     }
 
 

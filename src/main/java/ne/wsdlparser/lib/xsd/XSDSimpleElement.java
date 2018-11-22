@@ -1,24 +1,22 @@
 package ne.wsdlparser.lib.xsd;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ne.wsdlparser.lib.utility.Utils;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
-import ne.wsdlparser.lib.esql.ESQLLine;
 import ne.wsdlparser.lib.esql.constant.ESQLDataType;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
-
-public class XSDSimpleElement<T> extends XSDElement {
-    private XSDSimpleElementType simpleType;
+/**
+ * An implementation for any XSD element that cannot have children
+ * @author nour
+ */
+public class XSDSimpleElement extends XSDElement {
+    private final XSDSimpleElementType simpleType;
 
     public XSDSimpleElement(WSDLManagerRetrieval manager, Node node, XSDSimpleElementType type) {
-        super(manager, node, String.class);
+        super(manager, node);
         this.simpleType = type;
         this.setDefaultValue(Utils.getAttrValueFromNode(this.node, "default"));
         this.setFixedValue(Utils.getAttrValueFromNode(this.node, "fixed"));
@@ -26,26 +24,17 @@ public class XSDSimpleElement<T> extends XSDElement {
 
 
     @Override
-    public void setDefaultValue(String value) {
+    public final void setDefaultValue(String value) {
         this.defaultValue = this.prepareElementValue(value);
     }
-
+    
     @Override
     public void toESQL() throws WSDLException{
         super.toESQL();
-        String prefix = this.prefix;
-        if (this.prefix == null) {
-            String ns = this.getExplicitlySetTargetTamespace();
-            if (ns == null) {
-                ns = this.getTargetTamespace();
-            }
-            if (!this.manager.getTargetNameSpace().equals(ns)) {
-                prefix = this.manager.getPrefix(ns);
-            }
-        }
+        
         if (this.maxOccurs != 0) {
             String val = this.fixedValue == null ? this.defaultValue : this.fixedValue;
-            this.manager.getESQLManager().addParam(prefix, this.name, this.simpleType, val);
+            this.manager.getESQLManager().addParam(getPrintablePrefix(), this.name, this.simpleType, val);
         }
     }
 
@@ -64,7 +53,7 @@ public class XSDSimpleElement<T> extends XSDElement {
     }
 
     @Override
-    protected void setFixedValue(String fixedValue) {
+    protected final void setFixedValue(String fixedValue) {
         if (fixedValue != null)
             this.fixedValue = this.prepareElementValue(String.valueOf(fixedValue));
     }

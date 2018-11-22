@@ -22,7 +22,7 @@ public class XSDExtention extends XSDComplexElement {
 
     public XSDExtention(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDExtention.class);
+        super(manager, node);
 
     }
 
@@ -52,6 +52,7 @@ public class XSDExtention extends XSDComplexElement {
                 baseChild = (XSDComplexElement) getChildren().get(0);
                 for (XSDElement el : (ArrayList<XSDElement>) baseChild.getChildren()) {
                     el.explicitlySetTargetNameSpace(this.getTargetTamespace());
+                    el.setQualified(isQualified());
                     baseElement.addChild(el);
                 }
             } catch (IndexOutOfBoundsException e2) {

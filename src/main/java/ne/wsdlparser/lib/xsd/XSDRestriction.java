@@ -34,7 +34,7 @@ public class XSDRestriction extends XSDComplexElement {
 
     public XSDRestriction(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDExtention.class);
+        super(manager, node);
     }
 
     @Override
@@ -64,6 +64,8 @@ public class XSDRestriction extends XSDComplexElement {
             if (base == null) {
                 if (this.base.toLowerCase().equals("array")) {
                     XSDElement any = new XSDAny(this.manager, null);
+                    any.setQualified(isQualified());
+                    any.setExplicitTNS(getTargetTamespace());
                     this.children.add(any);
                 }
             }else{

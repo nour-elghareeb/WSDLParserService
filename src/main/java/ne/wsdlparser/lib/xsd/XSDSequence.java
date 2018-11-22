@@ -16,7 +16,7 @@ public class XSDSequence extends XSDComplexElement {
 
     public XSDSequence(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDSequence.class);
+        super(manager, node);
     }
 
     @Override

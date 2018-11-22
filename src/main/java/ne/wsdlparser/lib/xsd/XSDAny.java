@@ -12,7 +12,7 @@ import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
-public class XSDAny extends XSDSimpleElement<Void> {
+public class XSDAny extends XSDSimpleElement {
 
     public XSDAny(WSDLManagerRetrieval manager, Node node){
 
@@ -30,7 +30,7 @@ public class XSDAny extends XSDSimpleElement<Void> {
     }
     @Override
     public void toESQL() throws WSDLException {
-        addHelpComment();
+        addHelpComments();
         this.manager.getESQLManager().addParam(this.prefix, "", XSDSimpleElementType.ANY, null);
     }
 }

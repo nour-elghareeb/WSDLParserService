@@ -17,7 +17,7 @@ public class XSDSimpleContent extends XSDComplexElement {
 
     public XSDSimpleContent(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDComplexType.class);
+        super(manager, node);
     }
 
     @Override

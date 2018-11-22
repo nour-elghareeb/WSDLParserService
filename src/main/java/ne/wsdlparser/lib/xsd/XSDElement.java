@@ -18,63 +18,127 @@ import ne.wsdlparser.lib.exception.WSDLException;
 import ne.wsdlparser.lib.exception.WSDLExceptionCode;
 import ne.wsdlparser.lib.xsd.constant.XSDSimpleElementType;
 
+/**
+ * Abstract base class for any XSD element/type
+ *
+ * @author nour
+ */
 public abstract class XSDElement {
 
     protected String nodeHelp;
     protected String valueHelp;
     protected String value;
-    public String getValueHelp() {
-        return valueHelp;
-    }
+    protected String prefix;
     protected String name;
-
+    protected String fixedValue;
     protected int maxOccurs = -1;
     protected int minOccurs = -1;
     protected String defaultValue;
     protected boolean nillable;
-    protected Class<?> type;
-    protected String prefix = "";
-    protected Node node;
-    protected WSDLManagerRetrieval manager;
-    protected String xPath = "";
-    protected boolean isSkippable = false;
-    private String targetNamespace;
-    protected boolean nullifyChildrenName;
-    private boolean printable;
-    private String fixed;
-    protected String fixedValue;
+    protected boolean qualified;
+    private String explicitTNS;
 
-    @Nullable
-    public String getNodeHelp() {
-        return null;
+    public void setExplicitTNS(String explicitTNS) {
+        this.explicitTNS = explicitTNS;
     }
 
-    public XSDElement(WSDLManagerRetrieval manager, Node node, Class<?> type) {
-        this.type = type;
+    public boolean isQualified() {
+        try {
+            this.qualified = (boolean) node.getUserData("qualified");
+        } catch (Exception ex) {
+            this.qualified = false;
+        }
+        return this.qualified;
+    }
+
+    public void setQualified(boolean qualified) {
+        if (this.node != null){
+            this.node.setUserData("qualified", qualified, null);
+        }
+        this.qualified = qualified;
+    }
+    protected Node node;
+    protected WSDLManagerRetrieval manager;
+
+    @Nullable
+    public String getValueHelp() {
+        return valueHelp;
+    }
+
+    /**
+     *
+     * @param manager WSDLManager instance injection
+     * @param node XML node associated with this element
+     */
+    public XSDElement(WSDLManagerRetrieval manager, Node node) {
+        this.prefix = "";
         this.node = node;
         this.manager = manager;
         loadAttributes();
     }
 
+    /**
+     * XSD node help.. To be overridden if subclasses have use for it.
+     *
+     * @return
+     */
+    @Nullable
+    public String getNodeHelp() {
+        return null;
+    }
+
+    /**
+     * Check if this element is an instance of XSDComplex element
+     *
+     * @param element element to check
+     * @return true if complex.
+     */
     public static boolean isComplex(XSDElement element) {
         Boolean val = element instanceof XSDComplexElement;
         return val;
     }
 
+    /**
+     * Set XSD node help
+     *
+     * @param nodeHelp
+     */
     public void setNodeHelp(String nodeHelp) {
         this.nodeHelp = nodeHelp;
     }
 
+    /**
+     * Check if this node has parameters to print.
+     *
+     * @return
+     */
     protected abstract Boolean isESQLPrintable();
 
+    /**
+     * @return this node namespace embedded inside UserData during element
+     * parsing.
+     */
     public String getTargetTamespace() {
         if (this.node == null) {
+            if (isQualified()) {
+                return this.explicitTNS == null ? this.manager.getTargetNameSpace() : null;
+            }
             return null;
-        }
+        }        
         String ns = (String) this.node.getUserData("tns");
+        if (ns == null) {
+            if (isQualified()) {
+                return this.manager.getTargetNameSpace();
+            }
+        }
         return ns;
     }
 
+    /**
+     *
+     * @return this node namespace explicitly set to override normal namespace
+     * (if the element is imported from another XSD with a different NS.
+     */
     public String getExplicitlySetTargetTamespace() {
         if (this.node == null) {
             return null;
@@ -83,38 +147,68 @@ public abstract class XSDElement {
         return ns;
     }
 
-    public static XSDElement getInstance(WSDLManagerRetrieval manager, Node node)
+    /**
+     * Parse node to get the appropriate XSD element implementation.
+     *
+     * @param manager WSDLManager instance injection
+     * @param element XML node associated with this element
+     * @return XSDElement subclass based on the node type.
+     * @throws XPathExpressionException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws WSDLException
+     */
+    @Nullable
+    public static XSDElement getInstance(WSDLManagerRetrieval manager, Node element)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
         XSDElement xsdElement;
-        if (node == null) {
+        if (element == null) {
             return null;
         }
-
-        String nodeNameWithPrefix = node.getNodeName();
-        String nodeName = Utils.splitPrefixes(node.getNodeName())[1];
-        String name = Utils.getAttrValueFromNode(node, "name");
-        String type = Utils.getAttrValueFromNode(node, "type");
+        boolean isQualified;
+        try {
+            isQualified = (boolean) element.getUserData("qualified");
+        } catch (Exception ex) {
+            isQualified = false;
+        }
+        // get nodeName. ie: XSD:complexType
+        String nodeNameWithPrefix = element.getNodeName();
+        // Split nodeName to get the bare name. ie: complexType
+        String nodeName = Utils.splitPrefixes(element.getNodeName())[1];
+        // Get element name. may be null
+        String name = Utils.getAttrValueFromNode(element, "name");
+        // get element type. may be null
+        String type = Utils.getAttrValueFromNode(element, "type");
         // Check if node is element
-
-        Node element = node;
-        Node elementTypeNode = null;
+        /**
+         * if this is an attribute, just ignore it.
+         */
         if (nodeName.equals("attribute")) {
             return null;
         }
+        // Get target namespace embedded during XPath retrieved.
         String tns = (String) element.getUserData("tns");
+        // If this node has a type attribute.. Usually means this is an <element>
         if (type != null) {
+            // Try parsing this element type as a simple type. ie: string, int, boolean, etc...
             try {
                 xsdElement = XSDElement.getInstanceForSimpleElement(manager, element, Utils.splitPrefixes(type)[1]);
                 xsdElement.setName(name);
                 return xsdElement;
             } catch (WSDLException e) {
+                // This element type is probably refers to another complex type.
                 if (e.getCode().equals(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT)) {
-
                     element = (Node) manager.getXSDManager()
                             .find(String.format(Locale.getDefault(), "/schema/*[name() != '%s' and @name = '%s']",
                                     nodeNameWithPrefix, Utils.splitPrefixes(type)[1]), XPathConstants.NODE);
                     xsdElement = XSDElement.getInstance(manager, element);
                     tns = (String) element.getUserData("tns");
+
+                    if (xsdElement == null) {
+                        return null;
+                    }
+
                     xsdElement.setName(name);
                     return xsdElement;
                 }
@@ -122,25 +216,32 @@ public abstract class XSDElement {
             }
 
         }
+        // This node does not have a type attribute.
         try {
+            // Try parsing this xml node name as simple element
             xsdElement = XSDElement.getInstanceForSimpleElement(manager, element, nodeName);
             xsdElement.setName(name);
             return xsdElement;
         } catch (WSDLException e) {
-            // check if node name is already a type..
+            // try this node as a complex type.
             try {
                 xsdElement = XSDElement.getInstanceForComplexElement(manager, element);
                 xsdElement.setName(name);
                 return xsdElement;
             } catch (WSDLException e2) {
-                // not a complex element
+
+                // elemen is in fact a <element> with no type. Probably has a child type..                 
                 if (e2.getCode().equals(WSDLExceptionCode.XSD_NODE_IS_ELEMENT)) {
+                    // get element first valid child and parse it.
                     element = Utils.getFirstXMLChild(element);
                     element.setUserData("tns", tns, null);
+                    element.setUserData("qualified", isQualified, null);
+                    // Parse it recursively.
                     xsdElement = XSDElement.getInstance(manager, element);
+                    if (xsdElement == null) {
+                        return null;
+                    }
                     xsdElement.setName(name);
-                    // String tns = (String) element.getUserData("tns");
-                    xsdElement.setTargetNamespace(tns);
                     return xsdElement;
                 }
                 throw e;
@@ -149,10 +250,18 @@ public abstract class XSDElement {
 
     }
 
-    private void setTargetNamespace(String tns) {
-        this.targetNamespace = tns;
-    }
-
+    /**
+     * Parse node for a Complex Type element
+     *
+     * @param manager WSDLManager instance injection
+     * @param node XML node to parse
+     * @return XSDComplexElement subclass or throws an exception.
+     * @throws WSDLException
+     * @throws XPathExpressionException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     */
     private static XSDComplexElement getInstanceForComplexElement(WSDLManagerRetrieval manager, Node node)
             throws WSDLException, XPathExpressionException, SAXException, IOException, ParserConfigurationException {
         String nodeName = Utils.splitPrefixes(node.getNodeName())[1];
@@ -188,45 +297,38 @@ public abstract class XSDElement {
         }
     }
 
+    /**
+     * Parse node as XSDSimpleElement type
+     *
+     * @param manager WSDLManager instance injection
+     * @param node XML node to parse
+     * @return XSDSimpleElement subclass or throws an exception.
+     * @param type XSD type attribute
+     * @return
+     * @throws WSDLException
+     */
     private static XSDSimpleElement getInstanceForSimpleElement(WSDLManagerRetrieval manager, Node node, String type)
             throws WSDLException {
         XSDSimpleElement element;
 
-        try {
-            XSDSimpleElementType simpleType = XSDSimpleElementType.parse(type);
-            if (simpleType.equals(XSDSimpleElementType.LIST)) {
+        XSDSimpleElementType simpleType = XSDSimpleElementType.parse(type);
+        switch (simpleType) {
+            case LIST:
                 element = new XSDList(manager, node);
-            } else if (simpleType.equals(XSDSimpleElementType.ANY)) {
+                break;
+            case ANY:
                 element = new XSDAny(manager, node);
-            } else {
+                break;
+            default:
                 element = new XSDSimpleElement(manager, node, simpleType);
-            }
-            return element;
-        } catch (WSDLException e) {
-            throw new WSDLException(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT);
+                break;
         }
-
-        // try {
-        // XSDNumericType numericType = XSDNumericType.parse(type);
-        // element = new XSDNumeric(manager, node);
-        // ((XSDNumeric) element).setNumericType(numericType);
-        // return element;
-        // } catch (WSDLException e) {
-        // if (type.equals("string"))
-        // return new XSDString(manager, node);
-        // else if (type.equals("list")) {
-        // String[] itemType = Utils.splitPrefixes(Utils.getAttrValueFromNode(node,
-        // "itemType"));
-        // XSDElement itemTypeCLS = XSDElement.getInstanceForSimpleElement(manager,
-        // node, itemType[1]);
-        // element = new XSDList(manager, node);
-        // } else if (type.equals("boolean"))
-        // return new XSDBoolean(manager, node);
-        // else
-        // throw new WSDLException(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT);
-        // }
+        return element;
     }
 
+    /**
+     * Load attributes for this node.
+     */
     private void loadAttributes() {
         this.setNillable(Utils.getAttrValueFromNode(this.node, "nillable"));
         this.setName(Utils.getAttrValueFromNode(this.node, "name"));
@@ -236,10 +338,15 @@ public abstract class XSDElement {
         this.setFixedValue(Utils.getAttrValueFromNode(this.node, "fixed"));
     }
 
+    /**
+     * Set fixed value for this element if there is one
+     *
+     * @param fixedValue
+     */
     protected abstract void setFixedValue(String fixedValue);
 
     /**
-     * return if the element is nillable..
+     * return if the element is Nill-able..
      */
     public boolean isNillable() {
         return this.nillable;
@@ -351,19 +458,23 @@ public abstract class XSDElement {
         this.value = value;
     }
 
-    public Class<?> getType() {
-        return this.type;
-    }
-
     public String getPrefix() {
         return this.prefix;
     }
 
-    public void toESQL() throws WSDLException{
-        this.addHelpComment();
+    /**
+     * Generate ESQL lines for this element and its children.
+     *
+     * @throws WSDLException
+     */
+    public void toESQL() throws WSDLException {
+        this.addHelpComments();
     }
 
-    protected void addHelpComment() {
+    /**
+     * Add helpComments
+     */
+    protected void addHelpComments() {
         if (this instanceof XSDAnnotation) {
             this.manager.getESQLManager().addComment(ESQLVerbosity.DOCUMENTATION, this.getNodeHelp());
         } else {
@@ -387,17 +498,44 @@ public abstract class XSDElement {
         }
     }
 
+    /**
+     * Set a different namespace different from this node's parent. (if it is
+     * imported from another XSD file with different namespace)
+     *
+     * @param targetTamespace
+     */
     public void explicitlySetTargetNameSpace(String targetTamespace) {
         this.node.setUserData("EX_tns", targetTamespace, null);
     }
 
+    /**
+     * Set this element name and prefix to null.
+     */
     public void nullifyChildrenName() {
         this.name = null;
         this.prefix = null;
     }
 
+    /**
+     * Override this if the field has any printable parameters.
+     *
+     * @return
+     */
     protected boolean hasPrintable() {
         return false;
     }
 
+    protected String getPrintablePrefix() throws WSDLException {
+        String _prefix = this.prefix;
+        if (this.prefix == null) {
+            String ns = this.getExplicitlySetTargetTamespace();
+            if (ns == null) {
+                ns = this.getTargetTamespace();
+            }
+            if ((isQualified())) {
+                _prefix = this.manager.getPrefix(ns);
+            }
+        }
+        return _prefix;
+    }
 }

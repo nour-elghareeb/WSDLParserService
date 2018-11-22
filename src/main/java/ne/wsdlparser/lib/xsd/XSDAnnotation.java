@@ -16,7 +16,7 @@ public class XSDAnnotation extends XSDComplexElement {
 
     public XSDAnnotation(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDAnnotation.class);
+        super(manager, node);
     }
 
     @Override

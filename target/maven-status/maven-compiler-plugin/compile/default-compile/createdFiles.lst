@@ -1,6 +1,5 @@
 ne/wsdlparser/lib/esql/constant/ESQLDataType.class
 ne/utility/CompressionUtils.class
-ne/wsdlparser/lib/constant/LogVerbosity.class
 wsdlparse/ne/UploadWSDLResponse.class
 ne/wsdlparser/lib/xsd/restriction/XSDRestrictionFractionDigits.class
 ne/wsdlparser/lib/xsd/restriction/XSDRestrictionParam.class
@@ -12,25 +11,20 @@ ne/wsdlparser/lib/utility/ConsoleStyle$Style.class
 ne/wsdlparser/lib/xsd/XSDSimpleContent.class
 ne/utility/Utility.class
 ne/wsdlparser/lib/xsd/XSDList.class
-ne/wsdlparser/lib/Binding.class
 ne/wsdlparser/lib/esql/ESQLBlock.class
 ne/wsdlparser/lib/utility/ConsoleStyle$Color.class
-ne/wsdlparser/lib/Service.class
 ne/wsdlparser/listener/WSDLParserListener.class
 wsdlparse/ne/FilterAvailableWSDLsRequest.class
 wsdlparse/ne/ObjectFactory.class
 ne/wsdlparser/lib/esql/constant/ESQLSource.class
 ne/wsdlparser/lib/esql/ESQLSetterLine$1.class
 ne/wsdlparser/lib/WSDLOperation.class
-ne/wsdlparser/lib/WSDLProperty.class
 ne/wsdlparser/lib/WSDLManagerRetrieval.class
 ne/wsdlparser/lib/xsd/restriction/XSDRestrictionEnum.class
 ne/wsdlparser/lib/xsd/XSDElement.class
 wsdlparse/ne/GenerateMessageESQLResponse$NSLine.class
-ne/wsdlparser/lib/Utils.class
 ne/wsdlparser/lib/xsd/restriction/XSDRestrictionMinLength.class
 ne/wsdlparser/lib/WSDLMessage$1.class
-ne/wsdlparser/lib/Service$1.class
 wsdlparse/ne/ListOperationMessagesResponse.class
 wsdlparse/ne/GenerateMessageESQLResponse.class
 wsdlparse/ne/WSDLParserFaultDetails.class
@@ -40,7 +34,6 @@ ne/wsdlparser/lib/xsd/restriction/XSDRestrictionRange.class
 ne/wsdlparser/handler/FilterAvailableWSDLsHandler.class
 ne/wsdlparser/lib/esql/ESQLManager.class
 ne/wsdlparser/lib/xsd/XSDFile.class
-ne/wsdlparser/lib/Port.class
 ne/wsdlparser/handler/ListAvailableWSDLsHandler.class
 wsdlparse/ne/WSDLParser.class
 wsdlparse/ne/GenerateMessageESQLResponse$ESQLLine$ESQLComment.class
@@ -48,7 +41,6 @@ ne/wsdlparser/handler/UploadWSDLHandler.class
 ne/wsdlparser/lib/xsd/XSDManager.class
 ne/wsdlparser/lib/utility/ConsoleStyle.class
 ne/wsdlparser/lib/xsd/XSDAny.class
-ne/wsdlparser/lib/FaultMessage.class
 ne/wsdlparser/lib/xsd/XSDComplexType.class
 wsdlparse/ne/GenerateMessageESQLRequest.class
 wsdlparse/ne/GenerateMessageESQLResponse$ESQLLine$ESQLSetter.class
@@ -63,7 +55,6 @@ ne/wsdlparser/lib/xsd/XSDSimpleElement$1.class
 ne/wsdlparser/lib/WSDLMessage.class
 ne/wsdlparser/lib/xsd/XSDRestriction.class
 wsdlparse/ne/ListServicesRequest.class
-ne/wsdlparser/lib/PortType.class
 wsdlparse/ne/ListServicePortsResponse.class
 ne/wsdlparser/lib/esql/ESQLDeclareLine.class
 ne/wsdlparser/lib/xsd/constant/XSDSimpleElementType.class

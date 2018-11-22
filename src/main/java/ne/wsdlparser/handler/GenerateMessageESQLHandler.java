@@ -6,6 +6,8 @@
 package ne.wsdlparser.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ne.wsdlparser.lib.WSDLService;
@@ -19,6 +21,7 @@ import ne.wsdlparser.lib.esql.ESQLLine;
 import ne.wsdlparser.lib.esql.ESQLSetterLine;
 import ne.wsdlparser.lib.esql.constant.ESQLSource;
 import ne.wsdlparser.lib.exception.WSDLException;
+import ne.wsdlparser.lib.utility.Utils;
 import wsdlparse.ne.GenerateMessageESQLRequest;
 import wsdlparse.ne.GenerateMessageESQLResponse;
 import wsdlparse.ne.WSDLParserFault;
@@ -74,6 +77,7 @@ public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageES
                 response.getNSLine().add(nsLine);
             });
             ArrayList<ESQLLine> lines = this.manager.getESQLManager().getESQLBlock().getElementsLines();
+            HashSet<String> vars = new HashSet<>();
             lines.forEach((line) -> {
                 GenerateMessageESQLResponse.ESQLLine esqlLine = new GenerateMessageESQLResponse.ESQLLine();
                 if (line instanceof ESQLCommentLine) {
@@ -88,7 +92,19 @@ public class GenerateMessageESQLHandler extends ServiceHandler<GenerateMessageES
                     setterLine.setFieldType(((ESQLSetterLine) line).getXsdType().getESQLDataType().getValue());
                     setterLine.setXPath(((ESQLSetterLine) line).getxPath());
                     setterLine.setValueHelp(((ESQLSetterLine) line).getXsdType().getType());
-                    setterLine.setDefaultValue(((ESQLSetterLine) line).getDefaultValue());
+                    if (source.equals(ESQLSource.INPUT)) {
+                        String var = Utils.splitPrefixes(((ESQLSetterLine) line).getxPath().substring(((ESQLSetterLine) line).getxPath().lastIndexOf(".") + 1))[1];
+                        int i = 2;
+                        while (vars.contains(var)) {
+                            var = var+String.valueOf(i);
+                            i++;
+                        }
+                        vars.add(var);
+                        setterLine.setDefaultValue(var);
+
+                    }else{
+                        setterLine.setDefaultValue(((ESQLSetterLine) line).getDefaultValue());
+                    }
                     esqlLine.setESQLSetter(setterLine);
                 }
                 response.getESQLLine().add(esqlLine);

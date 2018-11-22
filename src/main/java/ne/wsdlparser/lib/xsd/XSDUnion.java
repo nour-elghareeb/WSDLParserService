@@ -22,7 +22,7 @@ public class XSDUnion extends XSDComplexElement {
 
     public XSDUnion(WSDLManagerRetrieval manager, Node node)
             throws XPathExpressionException, SAXException, IOException, ParserConfigurationException, WSDLException {
-        super(manager, node, XSDComplexType.class);
+        super(manager, node);
     }
 
     // TODO: load children throw memberTypes
