@@ -8,55 +8,87 @@ import ne.wsdlparser.lib.constant.ESQLVerbosity;
 import ne.wsdlparser.lib.esql.constant.ESQLDataType;
 import ne.wsdlparser.lib.esql.constant.ESQLSource;
 
+/**
+ * Block of ESQL lines
+ *
+ * @author nour
+ */
 public class ESQLBlock {
-    private WSDLManagerRetrieval manager;
-    private ArrayList<ESQLLine> elementsLines;
+
+    private final WSDLManagerRetrieval manager;
+    private final ArrayList<ESQLLine> elementsLines;
+    private final ArrayList<ESQLLine> nsDeclarations;
+    private final HashSet<String> prefixes;
+    private boolean lastWasEmpty = false;
 
     public ArrayList<ESQLLine> getElementsLines() {
         return elementsLines;
     }
 
-    public ArrayList<ESQLLine> getNsDeclarations() {
-        generateNSLines();
-        return nsDeclarations;
-    }
-    private ArrayList<ESQLLine> nsDeclarations;
-    private HashSet<String> prefixes;
-    private boolean lastWasEmpty = false;
-    
-
-    
-    
+    /**
+     *
+     * @param manager
+     */
     public ESQLBlock(WSDLManagerRetrieval manager) {
         this.manager = manager;
-        this.elementsLines = new ArrayList<ESQLLine>();
-        this.nsDeclarations = new ArrayList<ESQLLine>();
-        this.prefixes = new HashSet<String>();
+        this.elementsLines = new ArrayList<>();
+        this.nsDeclarations = new ArrayList<>();
+        this.prefixes = new HashSet<>();
     }
 
+    /**
+     * Add a line to the blokc
+     *
+     * @param line
+     */
     void addLine(ESQLLine line) {
         this.elementsLines.add(line);
         this.lastWasEmpty = false;
     }
 
+    /**
+     * add a prefix to the block with no duplicates.
+     *
+     * @param prefix
+     */
     void addPrefix(String prefix) {
-        if (prefix == null)
+        if (prefix == null) {
             return;
+        }
         this.prefixes.add(prefix);
     }
 
-    private void generateNSLines() {
+    /**
+     *
+     * Generate NS lines from the set of prefix used in this block..
+     *
+     * @return
+     */
+    private ArrayList<ESQLLine> generateNSLines() {
         this.nsDeclarations.clear();
         for (String prefix : prefixes) {
             this.nsDeclarations
                     .add(new ESQLDeclareLine(prefix, ESQLDataType.NAMESPACE, this.manager.getNamespaceURI(prefix)));
         }
+        return this.nsDeclarations;
     }
 
+    /**
+     * Print line as output with colors
+     */
     public void printOutputSetters() {
         this.printESQL(ESQLSource.OUTPUT, true);
     }
-    public ArrayList<String> getLinesAsList(ESQLSource source, boolean useRef, boolean useColors){
+
+    /**
+     * Generate ESQL lines and returns them as a list.
+     *
+     * @param source Input/Output
+     * @param useRef REFERENCE/ESQL Type
+     * @param useColors true to use colors.
+     * @return
+     */
+    public ArrayList<String> getLinesAsList(ESQLSource source, boolean useRef, boolean useColors) {
         ArrayList<String> lines = new ArrayList<>();
         this.generateNSLines();
         for (ESQLLine line : this.nsDeclarations) {
@@ -67,25 +99,41 @@ public class ESQLBlock {
         }
         for (ESQLLine line : this.elementsLines) {
             line.setSource(source);
-            line.useReferences(useRef);            
+            line.useReferences(useRef);
             lines.add(line.generate(useColors));
 //            lines.append(System.getProperty("line.separator"));
 
         }
         return lines;
-        
+
     }
-    public String getLinesAsString(ESQLSource source, boolean useRef, boolean useColors){
+
+    /**
+     * Generate ESQL lines and returns as String block
+     *
+     * @param source Input/Output
+     * @param useRef REFERENCE/ESQL Type
+     * @param useColors true to use colors.
+     * @return String block of Lines
+     */
+    public String getLinesAsString(ESQLSource source, boolean useRef, boolean useColors) {
         StringBuilder lines = new StringBuilder();
         ArrayList<String> lineList = this.getLinesAsList(source, useRef, useColors);
-        for (String line : lineList){
-            lines.append(line);            
+        for (String line : lineList) {
+            lines.append(line);
             lines.append(System.getProperty("line.separator"));
         }
         return lines.toString();
 
     }
-    private void printESQL(ESQLSource source, boolean useRef){
+
+    /**
+     * Print lines to the console with colors (bash)..
+     *
+     * @param source
+     * @param useRef
+     */
+    private void printESQL(ESQLSource source, boolean useRef) {
         this.generateNSLines();
         for (ESQLLine line : this.nsDeclarations) {
             line.setSource(source);
@@ -94,26 +142,41 @@ public class ESQLBlock {
         }
         for (ESQLLine line : this.elementsLines) {
             line.setSource(source);
-            line.useReferences(useRef);            
+            line.useReferences(useRef);
             line.print();
 
         }
     }
+
+    /**
+     * print lines as Input with colors
+     */
     public void printInputVariables() {
-        this.printESQL(ESQLSource.INPUT, false);
+        this.printESQL(ESQLSource.INPUT, true);
     }
+
+    /**
+     * print lines as output with colors
+     */
     public void printInputReferences() {
         this.printESQL(ESQLSource.INPUT, true);
     }
 
-    
-
+    /**
+     * Add an empty line.
+     *
+     * @param allowMultiSuccessiveEmpty false to prevent successive empty lines.
+     */
     public void addEmptyLine(boolean allowMultiSuccessiveEmpty) {
-        if (!this.lastWasEmpty || (allowMultiSuccessiveEmpty && this.lastWasEmpty))
+        if (!this.lastWasEmpty || (allowMultiSuccessiveEmpty && this.lastWasEmpty)) {
             this.elementsLines.add(new ESQLCommentLine(ESQLVerbosity.EMPTY_LINES, null));
+        }
         this.lastWasEmpty = true;
     }
 
+    /**
+     * Clear block of lines, prefixes, and namespaces..
+     */
     public void clear() {
         this.elementsLines.clear();
         this.prefixes.clear();
@@ -121,5 +184,4 @@ public class ESQLBlock {
         this.lastWasEmpty = false;
     }
 
- 
 }

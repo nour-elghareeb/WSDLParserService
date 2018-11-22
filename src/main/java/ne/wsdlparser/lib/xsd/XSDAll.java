@@ -12,6 +12,11 @@ import org.xml.sax.SAXException;
 import ne.wsdlparser.lib.WSDLManagerRetrieval;
 import ne.wsdlparser.lib.exception.WSDLException;
 
+/**
+ * XSD All complex type implementation
+ *
+ * @author nour
+ */
 public class XSDAll extends XSDComplexElement {
 
     public XSDAll(WSDLManagerRetrieval manager, Node node)
@@ -21,10 +26,10 @@ public class XSDAll extends XSDComplexElement {
 
     @Override
     public String getNodeHelp() {
-        return (this.children.size() <= 1) ? null :
-            String.format(Locale.getDefault(),
-                "The following % children can appear in any order and each of them can appear once or not at all",
-                this.children.size());
+        return (this.children.size() <= 1) ? null
+                : String.format(Locale.getDefault(),
+                        "The following % children can appear in any order and each of them can appear once or not at all",
+                        this.children.size());
     }
 
     @Override

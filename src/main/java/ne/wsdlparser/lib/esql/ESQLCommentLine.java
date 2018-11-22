@@ -34,7 +34,9 @@ public class ESQLCommentLine extends ESQLLine {
             return "";
         return "-- ".concat(this.value).concat(";");
     }
-
+    /**
+     * print line. if value is null, it prints empty line.
+     */
     @Override
     public void print() {
         if (this.value == null) {

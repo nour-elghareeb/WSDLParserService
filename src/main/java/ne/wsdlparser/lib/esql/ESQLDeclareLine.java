@@ -4,7 +4,10 @@ import java.util.Locale;
 
 import ne.wsdlparser.lib.esql.constant.ESQLDataType;
 import ne.wsdlparser.lib.utility.ConsoleStyle;
-
+/**
+ * ESQL declaration line implementation
+ * @author nour
+ */
 public class ESQLDeclareLine extends ESQLLine {
 
     public String getParam() {
@@ -40,7 +43,9 @@ public class ESQLDeclareLine extends ESQLLine {
         return String.format(Locale.getDefault(), "DECLARE %s %s '%s';", this.param, this.type.getValue(),
                 this.defaultValue);
     }
-
+    /**
+     * print line with colors
+     */
     @Override
     public void print() {
         String line = String.format(Locale.getDefault(), "%s %s %s '%s';",
