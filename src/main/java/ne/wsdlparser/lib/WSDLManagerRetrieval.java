@@ -1,6 +1,7 @@
 package ne.wsdlparser.lib;
 
 import com.sun.istack.Nullable;
+import java.io.File;
 import javax.validation.constraints.NotNull;
 
 import javax.xml.xpath.XPath;
@@ -59,5 +60,10 @@ public interface WSDLManagerRetrieval {
      * @throws WSDLException 
      */
     String getPrefix(String targetTamespace) throws WSDLException;
+    /**
+     * WSDL file directory getter
+     * @return current wsdl directory.
+     */
+    File getWSDLDirectory();
 
 }

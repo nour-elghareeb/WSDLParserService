@@ -37,7 +37,7 @@ public class WSDLManager implements WSDLManagerRetrieval {
     private final HashMap<String, String> namespaces;
     private String targetNS;
     private XPath xPath;
-    private String workingdir;
+    private File workingDirectory;
     private XSDManager xsdManager;
     private ESQLManager esqlManager;
 
@@ -48,7 +48,7 @@ public class WSDLManager implements WSDLManagerRetrieval {
      * @throws WSDLException
      */
     public WSDLManager(String path) throws WSDLException {
-        this.namespaces = new HashMap<String, String>();
+        this.namespaces = new HashMap<>();
 
         //Add starting namespaces and prefixes for wsdl and soapenv
         this.namespaces.put("wsdl", "http://schemas.xmlsoap.org/wsdl/");
@@ -72,7 +72,7 @@ public class WSDLManager implements WSDLManagerRetrieval {
                 throw new WSDLException(WSDLExceptionCode.WSDL_FILE_NOT_FOUND);
             }
             //get wsdl file directory to search for XSD files
-            this.workingdir = file.getParent();
+            this.workingDirectory = file.getParentFile();
             this.wsdl = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(file));
             // Create new XPath object
             this.xPath = XPathFactory.newInstance().newXPath();
@@ -156,7 +156,7 @@ public class WSDLManager implements WSDLManagerRetrieval {
         try {
             NodeList types = (NodeList) this.xPath.compile("/definitions/types/schema").evaluate(this.wsdl,
                     XPathConstants.NODESET);
-            this.xsdManager = new XSDManager(this, this.workingdir, types);
+            this.xsdManager = new XSDManager(this, types);
 
             return true;
 
@@ -279,6 +279,11 @@ public class WSDLManager implements WSDLManagerRetrieval {
             prefix = getXSDManager().getPrefix(tns);
         }
         return prefix;
+    }
+
+    @Override
+    public File getWSDLDirectory() {
+        return this.workingDirectory;
     }
 
 }

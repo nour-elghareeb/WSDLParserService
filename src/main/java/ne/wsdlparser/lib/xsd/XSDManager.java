@@ -26,11 +26,10 @@ public class XSDManager {
     private String workingdir;
     private XSDFile xsd;
 
-    public XSDManager(WSDLManagerRetrieval wsdlManager, String workingdir, NodeList schemas) throws WSDLException {
-        this.workingdir = workingdir;
+    public XSDManager(WSDLManagerRetrieval wsdlManager, NodeList schemas) throws WSDLException {
         // this.targetNS = Utils.getAttrValueFromNode(schemas, "targetNamespace");
-
-        this.xsd = new XSDFile(workingdir, schemas);
+        
+        this.xsd = new XSDFile(wsdlManager, schemas);
 
     }
 

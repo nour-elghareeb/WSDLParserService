@@ -122,7 +122,7 @@ public class WSDLOperation {
             message.setNode(messageNode);
             message.setName(Utils.getAttrValueFromNode(messageTypeNode, "message"));
             message.loadParams();
-        } catch (XPathExpressionException | WSDLException ex) {
+        } catch (XPathExpressionException ex) {
             Logger.getLogger(WSDLOperation.class.getName()).log(Level.SEVERE, null, ex);
             throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);
         }
