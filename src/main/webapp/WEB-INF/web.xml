@@ -10,7 +10,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>WSDLParser</servlet-name>
-        <url-pattern>/WSDLParser</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

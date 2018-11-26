@@ -1,10 +1,10 @@
 package ne.wsdlparser.lib.xsd;
 
-import com.sun.istack.internal.logging.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
@@ -136,7 +136,7 @@ public class XSDRestriction extends XSDComplexElement {
                 break;
             }
         } catch (WSDLException e) {
-            Logger.getLogger(XSDRestriction.class).log(Level.SEVERE, null, e);
+            Logger.getLogger(XSDRestriction.class.getName()).log(Level.SEVERE, null, e);
         }
 
     }
@@ -156,7 +156,7 @@ public class XSDRestriction extends XSDComplexElement {
             return param;
         } catch (InstantiationException | IllegalAccessException e) {
             // TODO Auto-generated catch block
-            Logger.getLogger(XSDRestriction.class).log(Level.SEVERE, null, e);
+            Logger.getLogger(XSDRestriction.class.getName()).log(Level.SEVERE, null, e);
         }
         // TODO Auto-generated catch block
         throw new WSDLException(WSDLExceptionCode.WSDL_PARSING_EXCEPTION);

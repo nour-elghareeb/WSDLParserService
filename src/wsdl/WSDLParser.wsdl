@@ -240,7 +240,7 @@
     </wsdl:binding>
     <wsdl:service name="WSDLParser">
         <wsdl:port binding="tns:WSDLParserSOAP" name="WSDLParserSOAP">
-            <soap:address location="http://localhost:8005/wsdlparser/WSDLParser"/>
+            <soap:address location="http://localhost:8090/wsdlparser/WSDLParser"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
