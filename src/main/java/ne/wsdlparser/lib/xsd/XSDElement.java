@@ -199,16 +199,15 @@ public abstract class XSDElement {
             } catch (WSDLException e) {
                 // This element type is probably refers to another complex type.
                 if (e.getCode().equals(WSDLExceptionCode.XSD_NOT_SIMPLE_ELEMENT)) {
+                    Node parent = element;
                     element = (Node) manager.getXSDManager()
                             .find(String.format(Locale.getDefault(), "/schema/*[name() != '%s' and @name = '%s']",
                                     nodeNameWithPrefix, Utils.splitPrefixes(type)[1]), XPathConstants.NODE);
                     xsdElement = XSDElement.getInstance(manager, element);
-                    tns = (String) element.getUserData("tns");
-
                     if (xsdElement == null) {
                         return null;
                     }
-
+                    xsdElement.loadParentInfo(parent);
                     xsdElement.setName(name);
                     return xsdElement;
                 }
@@ -232,6 +231,11 @@ public abstract class XSDElement {
 
                 // elemen is in fact a <element> with no type. Probably has a child type..                 
                 if (e2.getCode().equals(WSDLExceptionCode.XSD_NODE_IS_ELEMENT)) {
+                    Node parent = element;
+                    String minOccurrs = Utils.getAttrValueFromNode(element, "minOccurrs");
+                    String maxOccurrs = Utils.getAttrValueFromNode(element, "maxOccurrs");
+                    String fixed = Utils.getAttrValueFromNode(element, "maxOccurrs");
+
                     // get element first valid child and parse it.
                     element = Utils.getFirstXMLChild(element);
                     element.setUserData("tns", tns, null);
@@ -241,6 +245,7 @@ public abstract class XSDElement {
                     if (xsdElement == null) {
                         return null;
                     }
+                    xsdElement.loadParentInfo(parent);
                     xsdElement.setName(name);
                     return xsdElement;
                 }
@@ -330,12 +335,16 @@ public abstract class XSDElement {
      * Load attributes for this node.
      */
     private void loadAttributes() {
-        this.setNillable(Utils.getAttrValueFromNode(this.node, "nillable"));
-        this.setName(Utils.getAttrValueFromNode(this.node, "name"));
-        this.setMaxOccurs(Utils.getAttrValueFromNode(this.node, "maxOccurs"));
-        this.setMinOccurs(Utils.getAttrValueFromNode(this.node, "minOccurs"));
-        this.setDefaultValue(Utils.getAttrValueFromNode(this.node, "default"));
-        this.setFixedValue(Utils.getAttrValueFromNode(this.node, "fixed"));
+        this.setName(Utils.getAttrValueFromNode(node, "name"));
+        loadAttributes(this.node);
+    }
+
+    private void loadAttributes(Node node) {
+        this.setNillable(Utils.getAttrValueFromNode(node, "nillable"));
+        this.setMaxOccurs(Utils.getAttrValueFromNode(node, "maxOccurs"));
+        this.setMinOccurs(Utils.getAttrValueFromNode(node, "minOccurs"));
+        this.setDefaultValue(Utils.getAttrValueFromNode(node, "default"));
+        this.setFixedValue(Utils.getAttrValueFromNode(node, "fixed"));
     }
 
     /**
@@ -385,6 +394,7 @@ public abstract class XSDElement {
 
     /**
      * return minimum occurrence..
+     *
      * @return this node min occurs or -1;
      */
     public int getMinOccurs() {
@@ -476,20 +486,25 @@ public abstract class XSDElement {
      * Add helpComments
      */
     protected void addHelpComments() {
+        String type = "";
+        if (this instanceof XSDComplexElement) {
+            type = this.name == null ? "Complex || " : this.name + " || ";//this instanceof XSDSimpleElement || this instanceof XSDList ? this.name : "Complex Mutliplicity -- ";
+        }
+        if (this.minOccurs == 0 && (this.maxOccurs == -1 || this.maxOccurs == 1)) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, type + "Optional");
+        } else if (this.minOccurs == 0 && this.maxOccurs > 1) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, type + " " + this.minOccurs + " to " + this.maxOccurs + " repetitions");
+        } else if (this.minOccurs == 1 && this.minOccurs == this.maxOccurs) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), type + "Required"));
+        } else if (this.minOccurs > 1 && this.minOccurs == this.maxOccurs) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), type + "Must appear exactly %s times", this.minOccurs));
+        } else if (this.minOccurs > 1) {
+            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), type + "Must appear more than %s and less than %s", this.minOccurs, this.maxOccurs));
+        }
         if (this instanceof XSDAnnotation) {
             this.manager.getESQLManager().addComment(ESQLVerbosity.DOCUMENTATION, this.getNodeHelp());
         } else {
             this.manager.getESQLManager().addComment(ESQLVerbosity.NODE_HELP, this.getNodeHelp());
-        }
-
-        if (this.minOccurs == 0) {
-            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, "Optional");
-        } else if (this.minOccurs == 1 && this.minOccurs == this.maxOccurs) {
-            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Required"));
-        } else if (this.minOccurs > 1 && this.minOccurs == this.maxOccurs) {
-            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Must appear exactly %s times", this.minOccurs));
-        } else if (this.minOccurs > 1) {
-            this.manager.getESQLManager().addComment(ESQLVerbosity.MULTIPLICITY, String.format(Locale.getDefault(), "Must appear more than %s and less than %s", this.minOccurs, this.maxOccurs));
         }
         if (this.nillable) {
             this.manager.getESQLManager().addComment(ESQLVerbosity.VALUE_HELP, String.format(Locale.getDefault(), "This field is nillable."));
@@ -545,5 +560,9 @@ public abstract class XSDElement {
             }
         }
         return _prefix;
+    }
+
+    private void loadParentInfo(Node parent) {
+        this.loadAttributes(parent);
     }
 }

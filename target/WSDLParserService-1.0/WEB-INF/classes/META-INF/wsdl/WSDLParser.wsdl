@@ -72,6 +72,7 @@
     <wsdl:message name="WSDLParserFault">
         <wsdl:part name="parameters" element="tns:WSDLParserFaultDetails"></wsdl:part>
     </wsdl:message>
+    
     <wsdl:portType name="WSDLParser">
         <wsdl:operation name="UploadWSDL">
             <wsdl:input message="tns:UploadWSDLRequest" name="UploadWSDLRequest"/>

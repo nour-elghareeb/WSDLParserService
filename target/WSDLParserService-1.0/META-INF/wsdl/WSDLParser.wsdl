@@ -62,7 +62,6 @@
         <wsdl:part element="tns:GenerateMessageESQLResponse" name="parameters" />
     </wsdl:message>
     
-    
     <wsdl:message name="DeleteWSDLRequest">
         <wsdl:part element="tns:DeleteWSDLRequest" name="parameters" />
     </wsdl:message>
